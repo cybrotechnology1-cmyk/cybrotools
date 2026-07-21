@@ -150,13 +150,7 @@ export default function ImageEditor() {
         if (e.data.type === "complete" && e.data.resultData) {
           worker.removeEventListener("message", onMessage);
 
-          const { data: maskData, width: maskW, height: maskH } = e.data.resultData;
-
-          const resultCanvas = document.createElement("canvas");
-          resultCanvas.width = finalWidth;
-          resultCanvas.height = finalHeight;
-          const rCtx = resultCanvas.getContext("2d");
-          if (!rCtx) { resolve(""); return; }
+          const { data: rgbaData, width: maskW, height: maskH } = e.data.resultData;
 
           const origCanvas = document.createElement("canvas");
           origCanvas.width = finalWidth;
@@ -173,31 +167,27 @@ export default function ImageEditor() {
 
           const origData = oCtx.getImageData(0, 0, finalWidth, finalHeight);
           const blurData = bCtx.getImageData(0, 0, finalWidth, finalHeight);
-          const outputData = rCtx.createImageData(finalWidth, finalHeight);
+          const outputData = new ImageData(finalWidth, finalHeight);
 
-          for (let y = 0; y < finalHeight; y++) {
-            for (let x = 0; x < finalWidth; x++) {
-              const mx = Math.min(Math.round((x / finalWidth) * maskW), maskW - 1);
-              const my = Math.min(Math.round((y / finalHeight) * maskH), maskH - 1);
-              const maskIdx = my * maskW + mx;
-              const maskVal = maskData[maskIdx];
-              const idx = (y * finalWidth + x) * 4;
-
-              if (maskVal > 128) {
-                outputData.data[idx] = origData.data[idx];
-                outputData.data[idx + 1] = origData.data[idx + 1];
-                outputData.data[idx + 2] = origData.data[idx + 2];
-                outputData.data[idx + 3] = 255;
-              } else {
-                outputData.data[idx] = blurData.data[idx];
-                outputData.data[idx + 1] = blurData.data[idx + 1];
-                outputData.data[idx + 2] = blurData.data[idx + 2];
-                outputData.data[idx + 3] = 255;
-              }
+          for (let i = 0; i < finalWidth * finalHeight; i++) {
+            const alpha = rgbaData[i * 4 + 3];
+            const idx = i * 4;
+            if (alpha > 128) {
+              outputData.data[idx] = origData.data[idx];
+              outputData.data[idx + 1] = origData.data[idx + 1];
+              outputData.data[idx + 2] = origData.data[idx + 2];
+            } else {
+              outputData.data[idx] = blurData.data[idx];
+              outputData.data[idx + 1] = blurData.data[idx + 1];
+              outputData.data[idx + 2] = blurData.data[idx + 2];
             }
+            outputData.data[idx + 3] = 255;
           }
 
-          rCtx.putImageData(outputData, 0, 0);
+          const resultCanvas = document.createElement("canvas");
+          resultCanvas.width = finalWidth;
+          resultCanvas.height = finalHeight;
+          resultCanvas.getContext("2d")!.putImageData(outputData, 0, 0);
           resolve(resultCanvas.toDataURL("image/png"));
         } else if (e.data.type === "error") {
           worker.removeEventListener("message", onMessage);
