@@ -12,6 +12,10 @@ export const metadata: Metadata = {
   title: 'Cybro Tools | Fast & Private Browser Tools',
   description: 'Production-grade tools running entirely in your browser. Secure, fast, and private.',
   keywords: 'browser tools, AI, privacy, background removal, youtube thumbnail, password generator',
+  other: {
+    'google-site-verification': 'ow3p7-sAgz1nmc4oLvtLKoM1B97TfQjJBdiicaxrXyg',
+    'monetag': 'ba839a44023faec4820c9e220a9bf067',
+  },
 };
 
 export default function RootLayout({children}: {children: React.ReactNode}) {
