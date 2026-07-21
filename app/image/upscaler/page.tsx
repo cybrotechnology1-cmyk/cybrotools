@@ -209,7 +209,7 @@ export default function ImageUpscaler() {
           // @ts-ignore
           const upscaler = new window.Upscaler({
             // @ts-ignore
-            model: window.DefaultModel
+            model: window.DefaultUpscalerJSModel
           });
 
           setAiProgress(0);
