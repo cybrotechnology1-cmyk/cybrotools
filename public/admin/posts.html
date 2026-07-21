@@ -84,6 +84,25 @@
         </div>
 
         <div class="space-y-1.5">
+          <label for="post-coverimage" class="text-xs font-bold uppercase text-gray-400">Cover Image URL</label>
+          <div class="flex gap-2">
+            <input 
+              type="url" 
+              id="post-coverimage" 
+              class="flex-1 w-full bg-gray-50 dark:bg-zinc-950 border border-gray-200 dark:border-zinc-800 rounded-xl py-3 px-4 text-sm text-gray-900 dark:text-white focus:outline-none focus:border-blue-500"
+              placeholder="https://example.com/cover.jpg or /api/cover?title=..."
+            >
+            <button type="button" id="open-media-btn" class="px-4 py-3 border border-gray-200 dark:border-zinc-800 rounded-xl hover:bg-gray-100 dark:hover:bg-zinc-800 text-gray-500" title="Open Media Library">
+              <i data-lucide="image" class="w-4 h-4"></i>
+            </button>
+          </div>
+          <div id="cover-preview" class="mt-2 rounded-xl overflow-hidden border border-gray-200 dark:border-zinc-800 max-h-40 hidden">
+            <img id="cover-preview-img" src="" alt="Cover preview" class="w-full h-full object-cover" />
+          </div>
+          <p class="text-[10px] text-gray-400">Upload images via <a href="/admin/media.html" target="_blank" class="text-blue-500 underline">Media Library</a>, then paste the URL here. Or use auto-generated cover.</p>
+        </div>
+
+        <div class="space-y-1.5">
           <label for="post-excerpt" class="text-xs font-bold uppercase text-gray-400">Short Excerpt</label>
           <textarea 
             id="post-excerpt" 
@@ -282,7 +301,9 @@
       document.getElementById("post-id").value = "";
       document.getElementById("post-author").value = "Cybro Engineering Team";
       document.getElementById("post-readtime").value = "5 min read";
+      document.getElementById("post-coverimage").value = "";
       document.getElementById("post-date-override").value = "";
+      updateCoverPreview();
       openModal();
     }
 
@@ -298,7 +319,9 @@
       document.getElementById("post-author").value = post.author;
       document.getElementById("post-excerpt").value = post.excerpt;
       document.getElementById("post-content").value = post.content;
+      document.getElementById("post-coverimage").value = post.coverImage || "";
       document.getElementById("post-date-override").value = post.date || "";
+      updateCoverPreview();
 
       openModal();
     }
@@ -335,11 +358,13 @@
       const author = document.getElementById("post-author").value;
       const excerpt = document.getElementById("post-excerpt").value;
       const content = document.getElementById("post-content").value;
+      const coverImage = document.getElementById("post-coverimage").value;
       const dateOverride = document.getElementById("post-date-override").value;
 
       const payload = { title, category, readTime, author, excerpt, content };
       if (id) payload.id = id;
       if (dateOverride) payload.date = dateOverride;
+      if (coverImage) payload.coverImage = coverImage;
 
       const method = id ? "PUT" : "POST";
 
@@ -363,6 +388,34 @@
 
     document.getElementById("close-modal").addEventListener("click", closeModal);
     document.getElementById("cancel-btn").addEventListener("click", closeModal);
+
+    // Cover image preview
+    function updateCoverPreview() {
+      const url = document.getElementById("post-coverimage").value;
+      const preview = document.getElementById("cover-preview");
+      const img = document.getElementById("cover-preview-img");
+      if (url) {
+        preview.classList.remove("hidden");
+        img.src = url;
+      } else {
+        preview.classList.add("hidden");
+        img.src = "";
+      }
+    }
+    document.getElementById("post-coverimage").addEventListener("input", updateCoverPreview);
+
+    // Open media library
+    document.getElementById("open-media-btn").addEventListener("click", () => {
+      window.open("/admin/media.html", "mediaLibrary", "width=900,height=600");
+    });
+
+    // Check for cover image query param (from media library)
+    window.addEventListener("message", (e) => {
+      if (e.data && e.data.type === "select-cover") {
+        document.getElementById("post-coverimage").value = e.data.url;
+        updateCoverPreview();
+      }
+    });
 
     // Initial load
     loadData();

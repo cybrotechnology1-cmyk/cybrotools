@@ -40,6 +40,7 @@ import {
   Award,
   AlertTriangle,
   Search,
+  Upload,
 } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -1508,20 +1509,30 @@ export default function AdminDashboardPage() {
               {/* Cover Image URL */}
               <div className="space-y-1.5">
                 <label className="text-xs font-bold text-gray-700 dark:text-gray-300">Cover Image URL</label>
-                <input
-                  type="url"
-                  value={blogCoverImage}
-                  onChange={(e) => setBlogCoverImage(e.target.value)}
-                  placeholder="https://example.com/cover-image.jpg"
-                  className="w-full p-3 rounded-xl text-xs bg-gray-50 dark:bg-[#121124] text-gray-900 dark:text-white border border-gray-200 dark:border-[#1f1d3c] focus:outline-none focus:border-purple-500"
-                />
+                <div className="flex gap-2">
+                  <input
+                    type="url"
+                    value={blogCoverImage}
+                    onChange={(e) => setBlogCoverImage(e.target.value)}
+                    placeholder="https://example.com/cover-image.jpg"
+                    className="flex-1 w-full p-3 rounded-xl text-xs bg-gray-50 dark:bg-[#121124] text-gray-900 dark:text-white border border-gray-200 dark:border-[#1f1d3c] focus:outline-none focus:border-purple-500"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => window.open('/admin/media.html', 'mediaLibrary', 'width=900,height=600')}
+                    className="px-3 py-2 rounded-xl border border-gray-200 dark:border-[#1f1d3c] hover:bg-gray-100 dark:hover:bg-[#1b1937] text-gray-500 dark:text-[#8e8ca3]"
+                    title="Open Media Library"
+                  >
+                    <Upload className="w-4 h-4" />
+                  </button>
+                </div>
                 {blogCoverImage && (
                   <div className="mt-2 rounded-xl overflow-hidden border border-gray-200 dark:border-[#1f1d3c] max-h-40">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src={blogCoverImage} alt="Cover preview" className="w-full h-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
                   </div>
                 )}
-                <p className="text-[10px] text-gray-400">Paste an image URL to show as the blog cover image. Optional.</p>
+                <p className="text-[10px] text-gray-400">Upload images via <a href="/admin/media.html" target="_blank" rel="noopener noreferrer" className="text-purple-400 underline">Media Library</a>, then paste URL. Or use auto-generated cover.</p>
               </div>
 
               {/* Content (Markdown) */}
