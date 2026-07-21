@@ -1,16 +1,18 @@
 import { NextResponse } from "next/server";
-import { getStore } from "@/lib/db";
 
 export async function GET() {
-  try {
-    const store = getStore();
-    return new NextResponse(store.seo.robotsTxt, {
-      headers: {
-        "Content-Type": "text/plain; charset=utf-8",
-      },
-    });
-  } catch (error) {
-    console.error("Failed to generate robots.txt:", error);
-    return new NextResponse("Internal Server Error", { status: 500 });
-  }
+  const robotsTxt = `User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /api/
+
+Sitemap: https://cybrotools.xyz/sitemap.xml
+`;
+
+  return new NextResponse(robotsTxt, {
+    headers: {
+      "Content-Type": "text/plain; charset=utf-8",
+      "Cache-Control": "public, max-age=3600, s-maxage=3600",
+    },
+  });
 }
