@@ -72,6 +72,7 @@ interface BlogPost {
   author: string;
   readTime: string;
   date?: string;
+  coverImage?: string;
 }
 
 const availableCategories = [
@@ -143,6 +144,7 @@ export default function AdminDashboardPage() {
   const [blogAuthor, setBlogAuthor] = useState('Cybro Engineering Team');
   const [blogReadTime, setBlogReadTime] = useState('5 min read');
   const [blogContent, setBlogContent] = useState('');
+  const [blogCoverImage, setBlogCoverImage] = useState('');
   const [isBlogSubmitting, setIsBlogSubmitting] = useState(false);
   const [formError, setFormError] = useState('');
 
@@ -374,6 +376,7 @@ export default function AdminDashboardPage() {
     setBlogAuthor(post.author || 'Cybro Engineering Team');
     setBlogReadTime(post.readTime || '5 min read');
     setBlogContent(post.content);
+    setBlogCoverImage(post.coverImage || '');
     setFormError('');
     setIsBlogModalOpen(true);
   };
@@ -397,6 +400,7 @@ export default function AdminDashboardPage() {
         author: blogAuthor.trim(),
         readTime: blogReadTime.trim(),
         content: blogContent.trim(),
+        coverImage: blogCoverImage.trim() || '',
       };
 
       const url = '/api/admin/blog';
@@ -1499,6 +1503,25 @@ export default function AdminDashboardPage() {
                   placeholder="A short summary of the article shown in lists..."
                   className="w-full p-3 rounded-xl text-xs bg-gray-50 dark:bg-[#121124] text-gray-900 dark:text-white border border-gray-200 dark:border-[#1f1d3c] focus:outline-none focus:border-purple-500 resize-none"
                 />
+              </div>
+
+              {/* Cover Image URL */}
+              <div className="space-y-1.5">
+                <label className="text-xs font-bold text-gray-700 dark:text-gray-300">Cover Image URL</label>
+                <input
+                  type="url"
+                  value={blogCoverImage}
+                  onChange={(e) => setBlogCoverImage(e.target.value)}
+                  placeholder="https://example.com/cover-image.jpg"
+                  className="w-full p-3 rounded-xl text-xs bg-gray-50 dark:bg-[#121124] text-gray-900 dark:text-white border border-gray-200 dark:border-[#1f1d3c] focus:outline-none focus:border-purple-500"
+                />
+                {blogCoverImage && (
+                  <div className="mt-2 rounded-xl overflow-hidden border border-gray-200 dark:border-[#1f1d3c] max-h-40">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={blogCoverImage} alt="Cover preview" className="w-full h-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
+                  </div>
+                )}
+                <p className="text-[10px] text-gray-400">Paste an image URL to show as the blog cover image. Optional.</p>
               </div>
 
               {/* Content (Markdown) */}

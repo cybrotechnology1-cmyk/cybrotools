@@ -10,6 +10,7 @@ export interface BlogPost {
   date: string;
   author: string;
   readTime: string;
+  coverImage?: string;
 }
 
 export interface Category {

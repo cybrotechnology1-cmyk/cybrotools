@@ -119,7 +119,7 @@ export default function Blog() {
           Loading articles...
         </div>
       ) : selectedPost ? (
-        <div className="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-3xl p-6 md:p-10 space-y-8 max-w-4xl mx-auto relative shadow-sm">
+        <div className="bg-[#0c0a21] border border-zinc-800 rounded-3xl p-6 md:p-10 space-y-8 max-w-4xl mx-auto relative shadow-sm">
           
           {/* Dynamic Structured Schema for SEO crawlers */}
           {selectedPost.structuredData && (
@@ -134,20 +134,27 @@ export default function Blog() {
               setSelectedPost(null);
               window.scrollTo({ top: 0, behavior: "smooth" });
             }}
-            className="text-sm font-semibold text-purple-600 hover:text-purple-500 flex items-center gap-1.5 mb-4 group transition-colors"
+            className="text-sm font-semibold text-purple-400 hover:text-purple-300 flex items-center gap-1.5 mb-4 group transition-colors"
           >
             <span className="group-hover:-translate-x-1 transition-transform">←</span> Back to Articles
           </button>
+
+          {selectedPost.coverImage && (
+            <div className="rounded-2xl overflow-hidden border border-zinc-800 mb-6">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={selectedPost.coverImage} alt={selectedPost.title} className="w-full h-auto object-cover max-h-96" />
+            </div>
+          )}
           
           <div className="space-y-4">
-            <span className="px-3 py-1 bg-purple-500/10 text-purple-600 dark:text-purple-400 rounded-full text-xs font-semibold uppercase tracking-wide">
+            <span className="px-3 py-1 bg-purple-500/10 text-purple-400 rounded-full text-xs font-semibold uppercase tracking-wide">
               {selectedPost.category}
             </span>
-            <h2 className="text-2xl md:text-4xl font-extrabold tracking-tight text-gray-900 dark:text-white leading-tight">
+            <h2 className="text-2xl md:text-4xl font-extrabold tracking-tight text-white leading-tight">
               {selectedPost.title}
             </h2>
             
-            <div className="flex flex-wrap gap-4 text-xs text-gray-400 border-b border-gray-100 dark:border-zinc-800 pb-4">
+            <div className="flex flex-wrap gap-4 text-xs text-zinc-400 border-b border-zinc-800 pb-4">
               <span className="flex items-center gap-1"><User className="w-3.5 h-3.5" /> {selectedPost.author || "Cybro Team"}</span>
               <span className="flex items-center gap-1"><Calendar className="w-3.5 h-3.5" /> {selectedPost.date}</span>
               <span className="flex items-center gap-1"><Clock className="w-3.5 h-3.5" /> {selectedPost.readTime}</span>
@@ -155,36 +162,36 @@ export default function Blog() {
           </div>
 
           {/* Premium styled markdown contents */}
-          <div className="prose prose-zinc dark:prose-invert max-w-none pt-2">
+          <div className="prose prose-invert max-w-none pt-2">
             <ReactMarkdown
               components={{
-                h1: ({ children }) => <h1 className="text-2xl md:text-3xl font-extrabold text-gray-900 dark:text-white mt-8 mb-4 tracking-tight leading-snug">{children}</h1>,
-                h2: ({ children }) => <h2 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mt-8 mb-4 border-b border-gray-100 dark:border-zinc-800/80 pb-2 tracking-tight">{children}</h2>,
-                h3: ({ children }) => <h3 className="text-lg md:text-xl font-bold text-gray-900 dark:text-white mt-6 mb-3 tracking-tight">{children}</h3>,
-                p: ({ children }) => <p className="text-sm md:text-base text-gray-600 dark:text-zinc-300 leading-relaxed mb-5">{children}</p>,
-                ul: ({ children }) => <ul className="list-disc pl-5 space-y-2 mb-5 text-sm md:text-base text-gray-600 dark:text-zinc-300">{children}</ul>,
-                ol: ({ children }) => <ol className="list-decimal pl-5 space-y-2 mb-5 text-sm md:text-base text-gray-600 dark:text-zinc-300">{children}</ol>,
+                h1: ({ children }) => <h1 className="text-2xl md:text-3xl font-extrabold text-white mt-8 mb-4 tracking-tight leading-snug">{children}</h1>,
+                h2: ({ children }) => <h2 className="text-xl md:text-2xl font-bold text-white mt-8 mb-4 border-b border-zinc-800/80 pb-2 tracking-tight">{children}</h2>,
+                h3: ({ children }) => <h3 className="text-lg md:text-xl font-bold text-white mt-6 mb-3 tracking-tight">{children}</h3>,
+                p: ({ children }) => <p className="text-sm md:text-base text-zinc-300 leading-relaxed mb-5">{children}</p>,
+                ul: ({ children }) => <ul className="list-disc pl-5 space-y-2 mb-5 text-sm md:text-base text-zinc-300">{children}</ul>,
+                ol: ({ children }) => <ol className="list-decimal pl-5 space-y-2 mb-5 text-sm md:text-base text-zinc-300">{children}</ol>,
                 li: ({ children }) => <li className="leading-relaxed">{children}</li>,
-                blockquote: ({ children }) => <blockquote className="border-l-4 border-purple-500 pl-4 py-1.5 my-5 italic text-gray-700 dark:text-zinc-300 bg-purple-500/5 rounded-r-xl">{children}</blockquote>,
-                table: ({ children }) => <div className="overflow-x-auto my-6 rounded-xl border border-gray-150 dark:border-zinc-800"><table className="w-full text-left border-collapse text-xs md:text-sm">{children}</table></div>,
-                thead: ({ children }) => <thead className="bg-gray-50 dark:bg-zinc-800/50 text-gray-700 dark:text-zinc-300 font-bold border-b border-gray-150 dark:border-zinc-800">{children}</thead>,
-                tbody: ({ children }) => <tbody className="divide-y divide-gray-100 dark:divide-zinc-800/50">{children}</tbody>,
-                tr: ({ children }) => <tr className="hover:bg-gray-50/50 dark:hover:bg-zinc-800/30 transition-colors">{children}</tr>,
-                th: ({ children }) => <th className="p-3.5 font-semibold text-gray-900 dark:text-white">{children}</th>,
-                td: ({ children }) => <td className="p-3.5 text-gray-600 dark:text-zinc-300 font-medium">{children}</td>,
-                a: ({ href, children }) => <Link href={href || "#"} className="text-purple-600 dark:text-purple-400 hover:underline font-bold inline-flex items-center gap-0.5">{children}</Link>,
-                strong: ({ children }) => <strong className="font-bold text-gray-900 dark:text-white">{children}</strong>,
+                blockquote: ({ children }) => <blockquote className="border-l-4 border-purple-500 pl-4 py-1.5 my-5 italic text-zinc-300 bg-purple-500/5 rounded-r-xl">{children}</blockquote>,
+                table: ({ children }) => <div className="overflow-x-auto my-6 rounded-xl border border-zinc-800"><table className="w-full text-left border-collapse text-xs md:text-sm">{children}</table></div>,
+                thead: ({ children }) => <thead className="bg-zinc-800/50 text-zinc-300 font-bold border-b border-zinc-800">{children}</thead>,
+                tbody: ({ children }) => <tbody className="divide-y divide-zinc-800/50">{children}</tbody>,
+                tr: ({ children }) => <tr className="hover:bg-zinc-800/30 transition-colors">{children}</tr>,
+                th: ({ children }) => <th className="p-3.5 font-semibold text-white">{children}</th>,
+                td: ({ children }) => <td className="p-3.5 text-zinc-300 font-medium">{children}</td>,
+                a: ({ href, children }) => <Link href={href || "#"} className="text-purple-400 hover:underline font-bold inline-flex items-center gap-0.5">{children}</Link>,
+                strong: ({ children }) => <strong className="font-bold text-white">{children}</strong>,
               }}
             >
               {selectedPost.content}
             </ReactMarkdown>
           </div>
 
-          <div className="bg-gradient-to-r from-purple-500/5 to-blue-500/5 p-6 rounded-3xl border border-purple-500/10 dark:border-purple-500/20 mt-8 space-y-3">
-            <h4 className="font-bold text-sm text-gray-900 dark:text-white flex items-center gap-2">
+          <div className="bg-gradient-to-r from-purple-500/5 to-blue-500/5 p-6 rounded-3xl border border-purple-500/10 mt-8 space-y-3">
+            <h4 className="font-bold text-sm text-white flex items-center gap-2">
               <Compass className="w-4 h-4 text-purple-500" /> Key Takeaway
             </h4>
-            <p className="text-xs md:text-sm text-gray-500 dark:text-zinc-400 leading-relaxed">
+            <p className="text-xs md:text-sm text-zinc-400 leading-relaxed">
               Browser-only tooling avoids server roundtrips, saves bandwidth, protects your files, and enables offline-first operation.
             </p>
           </div>
@@ -217,33 +224,39 @@ export default function Blog() {
               {filteredPosts.map((post) => (
                 <div 
                   key={post.id}
-                  className="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-3xl p-6 flex flex-col justify-between hover:border-purple-500/40 dark:hover:border-purple-500/30 hover:shadow-lg hover:shadow-purple-500/5 transition-all duration-300 group cursor-pointer"
+                  className="bg-[#0c0a21] border border-zinc-800 rounded-3xl p-6 flex flex-col justify-between hover:border-purple-500/40 hover:shadow-lg hover:shadow-purple-500/5 transition-all duration-300 group cursor-pointer overflow-hidden"
                   onClick={() => {
                     setSelectedPost(post);
                     window.scrollTo({ top: 0, behavior: "smooth" });
                   }}
                 >
+                  {post.coverImage && (
+                    <div className="rounded-2xl overflow-hidden mb-4 -mx-1 -mt-1 border border-zinc-800">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={post.coverImage} alt={post.title} className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500" />
+                    </div>
+                  )}
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
-                      <span className="px-2.5 py-1 bg-purple-500/10 text-purple-600 dark:text-purple-400 rounded-lg text-xs font-semibold uppercase tracking-wide">
+                      <span className="px-2.5 py-1 bg-purple-500/10 text-purple-400 rounded-lg text-xs font-semibold uppercase tracking-wide">
                         {post.category}
                       </span>
                       {getCategoryIcon(post.category)}
                     </div>
                     
                     <div className="space-y-2">
-                      <h3 className="text-lg font-extrabold text-gray-900 dark:text-gray-100 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors line-clamp-2 leading-snug">
+                      <h3 className="text-lg font-extrabold text-white group-hover:text-purple-400 transition-colors line-clamp-2 leading-snug">
                         {post.title}
                       </h3>
-                      <p className="text-sm text-gray-500 dark:text-zinc-400 line-clamp-3 leading-relaxed">
+                      <p className="text-sm text-zinc-400 line-clamp-3 leading-relaxed">
                         {post.excerpt}
                       </p>
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between pt-6 border-t border-gray-150 dark:border-zinc-800/80 mt-4 text-xs text-gray-400">
+                  <div className="flex items-center justify-between pt-6 border-t border-zinc-800/80 mt-4 text-xs text-zinc-500">
                     <span className="flex items-center gap-1"><Calendar className="w-3.5 h-3.5" /> {post.date}</span>
-                    <span className="flex items-center gap-1 group-hover:text-purple-600 dark:group-hover:text-purple-400 font-bold transition-colors">
+                    <span className="flex items-center gap-1 group-hover:text-purple-400 font-bold transition-colors">
                       Read Article <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                     </span>
                   </div>
