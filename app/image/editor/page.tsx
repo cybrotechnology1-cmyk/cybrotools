@@ -137,14 +137,13 @@ export default function ImageEditor() {
       }
 
       const worker = workerRef.current;
-      const tempCanvas = document.createElement("canvas");
-      tempCanvas.width = finalWidth;
-      tempCanvas.height = finalHeight;
-      const tempCtx = tempCanvas.getContext("2d");
-      if (!tempCtx) { resolve(""); return; }
 
-      tempCtx.drawImage(img, sx, sy, sWidth, sHeight, 0, 0, finalWidth, finalHeight);
-      const imageDataUrl = tempCanvas.toDataURL("image/png");
+      const srcCanvas = document.createElement("canvas");
+      srcCanvas.width = finalWidth;
+      srcCanvas.height = finalHeight;
+      const srcCtx = srcCanvas.getContext("2d");
+      if (!srcCtx) { resolve(""); return; }
+      srcCtx.drawImage(img, sx, sy, sWidth, sHeight, 0, 0, finalWidth, finalHeight);
 
       const onMessage = (e: MessageEvent) => {
         if (e.data.type === "complete" && e.data.resultData) {
@@ -152,42 +151,27 @@ export default function ImageEditor() {
 
           const { data: rgbaData, width: maskW, height: maskH } = e.data.resultData;
 
-          const origCanvas = document.createElement("canvas");
-          origCanvas.width = finalWidth;
-          origCanvas.height = finalHeight;
-          const oCtx = origCanvas.getContext("2d")!;
-          oCtx.drawImage(img, sx, sy, sWidth, sHeight, 0, 0, finalWidth, finalHeight);
-
           const blurCanvas = document.createElement("canvas");
           blurCanvas.width = finalWidth;
           blurCanvas.height = finalHeight;
-          const bCtx = blurCanvas.getContext("2d")!;
-          bCtx.filter = `blur(${bgBlur}px)`;
-          bCtx.drawImage(origCanvas, 0, 0);
+          const blurCtx = blurCanvas.getContext("2d")!;
+          blurCtx.filter = `blur(${bgBlur}px)`;
+          blurCtx.drawImage(srcCanvas, 0, 0);
 
-          const origData = oCtx.getImageData(0, 0, finalWidth, finalHeight);
-          const blurData = bCtx.getImageData(0, 0, finalWidth, finalHeight);
-          const outputData = new ImageData(finalWidth, finalHeight);
-
-          for (let i = 0; i < finalWidth * finalHeight; i++) {
-            const alpha = rgbaData[i * 4 + 3];
-            const idx = i * 4;
-            if (alpha > 128) {
-              outputData.data[idx] = origData.data[idx];
-              outputData.data[idx + 1] = origData.data[idx + 1];
-              outputData.data[idx + 2] = origData.data[idx + 2];
-            } else {
-              outputData.data[idx] = blurData.data[idx];
-              outputData.data[idx + 1] = blurData.data[idx + 1];
-              outputData.data[idx + 2] = blurData.data[idx + 2];
-            }
-            outputData.data[idx + 3] = 255;
-          }
+          const subjectCanvas = document.createElement("canvas");
+          subjectCanvas.width = maskW;
+          subjectCanvas.height = maskH;
+          const subjectCtx = subjectCanvas.getContext("2d")!;
+          const subjectImgData = subjectCtx.createImageData(maskW, maskH);
+          subjectImgData.data.set(rgbaData);
+          subjectCtx.putImageData(subjectImgData, 0, 0);
 
           const resultCanvas = document.createElement("canvas");
           resultCanvas.width = finalWidth;
           resultCanvas.height = finalHeight;
-          resultCanvas.getContext("2d")!.putImageData(outputData, 0, 0);
+          const rCtx = resultCanvas.getContext("2d")!;
+          rCtx.drawImage(blurCanvas, 0, 0);
+          rCtx.drawImage(subjectCanvas, 0, 0, maskW, maskH, 0, 0, finalWidth, finalHeight);
           resolve(resultCanvas.toDataURL("image/png"));
         } else if (e.data.type === "error") {
           worker.removeEventListener("message", onMessage);
@@ -196,7 +180,7 @@ export default function ImageEditor() {
       };
 
       worker.addEventListener("message", onMessage);
-      worker.postMessage({ action: "remove_bg", id: "bgblur", imageURL: imageDataUrl });
+      worker.postMessage({ action: "remove_bg", id: "bgblur", imageURL: srcCanvas.toDataURL("image/png") });
     });
   };
 
