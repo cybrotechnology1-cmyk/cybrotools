@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useAuth } from '@/components/AuthProvider';
 import { 
   db, 
@@ -148,6 +148,8 @@ export default function AdminDashboardPage() {
   const [blogCoverImage, setBlogCoverImage] = useState('');
   const [isBlogSubmitting, setIsBlogSubmitting] = useState(false);
   const [formError, setFormError] = useState('');
+  const [blogCoverUploading, setBlogCoverUploading] = useState(false);
+  const blogCoverInputRef = useRef<HTMLInputElement>(null);
 
   const [actioningId, setActioningId] = useState<string | null>(null);
 
@@ -1035,81 +1037,13 @@ export default function AdminDashboardPage() {
           ) : (
             <div className="space-y-4">
               {filteredFeedback.map((item) => (
-                <div 
-                  key={item.id} 
-                  className={`p-6 rounded-3xl bg-white dark:bg-[#0c0a21] border transition-all shadow-sm flex flex-col md:flex-row justify-between gap-6 ${
-                    item.status === 'resolved' 
-                      ? 'border-gray-200 dark:border-gray-900/40 opacity-80' 
-                      : 'border-purple-500/20 dark:border-purple-500/10 hover:border-purple-500/40'
-                  }`}
-                >
-                  <div className="space-y-3 flex-1">
-                    <div className="flex flex-wrap items-center gap-2">
-                      <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wide border ${
-                        item.category === 'bug'
-                          ? 'bg-red-500/10 text-red-600 dark:text-red-400 border-red-500/20'
-                          : item.category === 'feature'
-                          ? 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20'
-                          : 'bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20'
-                      }`}>
-                        {item.category === 'bug' ? '🐛 Bug' : item.category === 'feature' ? '💡 Feature' : '💬 Other'}
-                      </span>
-
-                      <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold border ${
-                        item.status === 'resolved'
-                          ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20'
-                          : 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20 animate-pulse'
-                      }`}>
-                        {item.status === 'resolved' ? <Check className="w-3 h-3" /> : <Clock className="w-3 h-3" />}
-                        {item.status === 'resolved' ? 'Resolved' : 'Pending'}
-                      </span>
-
-                      <span className="text-[11px] text-gray-400 dark:text-[#525166] font-medium ml-auto md:ml-0">
-                        ⏱️ {formatTimestamp(item.createdAt)}
-                      </span>
-                    </div>
-
-                    <p className="text-sm text-gray-800 dark:text-white leading-relaxed font-semibold whitespace-pre-wrap">
-                      {item.text}
-                    </p>
-
-                    <div className="pt-2 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[11px] text-gray-500 dark:text-[#8e8ca3] border-t border-gray-100 dark:border-white/5">
-                      <span className="font-bold text-gray-700 dark:text-gray-300">By:</span>
-                      <span className="truncate">👤 {item.userName}</span>
-                      <span className="truncate">📧 <a href={`mailto:${item.userEmail}`} className="hover:underline text-purple-500">{item.userEmail}</a></span>
-                      <span className="truncate">🔑 ID: {item.userId}</span>
-                    </div>
-                  </div>
-
-                  <div className="flex md:flex-col justify-end items-center gap-2 md:w-48 shrink-0 border-t md:border-t-0 md:border-l border-gray-100 dark:border-white/5 pt-4 md:pt-0 md:pl-6">
-                    <button
-                      onClick={() => handleUpdateFeedbackStatus(item.id, item.status)}
-                      disabled={actioningId === item.id}
-                      className={`w-full py-2 px-4 rounded-xl font-bold text-xs transition-all flex items-center justify-center gap-2 ${
-                        item.status === 'resolved'
-                          ? 'bg-amber-500/10 hover:bg-amber-500/20 text-amber-600 dark:text-amber-400 border border-amber-500/20'
-                          : 'bg-emerald-600 hover:opacity-90 text-white shadow-md'
-                      }`}
-                    >
-                      {actioningId === item.id ? (
-                        <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                      ) : item.status === 'resolved' ? (
-                        'Mark as Pending'
-                      ) : (
-                        'Mark Resolved'
-                      )}
-                    </button>
-
-                    <button
-                      onClick={() => handleDeleteFeedback(item.id)}
-                      disabled={actioningId === item.id}
-                      className="w-full py-2 px-4 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-600 dark:text-red-400 border border-red-500/20 font-bold text-xs transition-all flex items-center justify-center gap-2"
-                    >
-                      <Trash2 className="w-3.5 h-3.5" />
-                      Delete Ticket
-                    </button>
-                  </div>
-                </div>
+                <FeedbackCard
+                  key={item.id}
+                  item={item}
+                  actioningId={actioningId}
+                  onUpdateStatus={handleUpdateFeedbackStatus}
+                  onDelete={handleDeleteFeedback}
+                />
               ))}
             </div>
           )}
@@ -1589,4 +1523,115 @@ export default function AdminDashboardPage() {
 
     </div>
   );
+}
+
+function FeedbackCard({ item, actioningId, onUpdateStatus, onDelete }: {
+  item: FeedbackItem;
+  actioningId: string | null;
+  onUpdateStatus: (id: string, status: string) => void;
+  onDelete: (id: string) => void;
+}) {
+  const [expanded, setExpanded] = React.useState(false);
+  const textRef = React.useRef<HTMLParagraphElement>(null);
+  const isLong = item.text.length > 300;
+
+  return (
+    <div
+      className={`p-6 rounded-3xl bg-white dark:bg-[#0c0a21] border transition-all shadow-sm flex flex-col md:flex-row justify-between gap-6 ${
+        item.status === 'resolved'
+          ? 'border-gray-200 dark:border-gray-900/40 opacity-80'
+          : 'border-purple-500/20 dark:border-purple-500/10 hover:border-purple-500/40'
+      }`}
+    >
+      <div className="space-y-3 flex-1 min-w-0">
+        <div className="flex flex-wrap items-center gap-2">
+          <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wide border ${
+            item.category === 'bug'
+              ? 'bg-red-500/10 text-red-600 dark:text-red-400 border-red-500/20'
+              : item.category === 'feature'
+              ? 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20'
+              : 'bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20'
+          }`}>
+            {item.category === 'bug' ? 'Bug' : item.category === 'feature' ? 'Feature' : 'Other'}
+          </span>
+
+          <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold border ${
+            item.status === 'resolved'
+              ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20'
+              : 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20 animate-pulse'
+          }`}>
+            {item.status === 'resolved' ? <Check className="w-3 h-3" /> : <Clock className="w-3 h-3" />}
+            {item.status === 'resolved' ? 'Resolved' : 'Pending'}
+          </span>
+
+          <span className="text-[11px] text-gray-400 dark:text-[#525166] font-medium ml-auto">
+            {formatTimestamp2(item.createdAt)}
+          </span>
+        </div>
+
+        <div className="bg-gray-50 dark:bg-[#121124] rounded-2xl p-4 border border-gray-100 dark:border-[#1f1d3c]">
+          <p
+            ref={textRef}
+            className={`text-sm text-gray-900 dark:text-white leading-relaxed whitespace-pre-wrap font-medium ${
+              !expanded && isLong ? 'line-clamp-6' : ''
+            }`}
+          >
+            {item.text}
+          </p>
+          {isLong && (
+            <button
+              onClick={() => setExpanded(!expanded)}
+              className="mt-2 text-xs font-bold text-purple-600 dark:text-purple-400 hover:underline"
+            >
+              {expanded ? 'Show less' : `Read full (${item.text.length} chars)`}
+            </button>
+          )}
+        </div>
+
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[11px] text-gray-500 dark:text-[#8e8ca3] border-t border-gray-100 dark:border-white/5 pt-3">
+          <span className="font-bold text-purple-600 dark:text-purple-400">{item.userName}</span>
+          <span className="text-gray-300">|</span>
+          <a href={`mailto:${item.userEmail}`} className="hover:underline text-purple-500 truncate max-w-[200px]">{item.userEmail}</a>
+          <span className="text-gray-300 hidden sm:inline">|</span>
+          <span className="hidden sm:inline text-[10px] font-mono text-gray-400">ID: {item.userId.substring(0, 12)}...</span>
+        </div>
+      </div>
+
+      <div className="flex md:flex-col justify-end items-center gap-2 md:w-44 shrink-0 border-t md:border-t-0 md:border-l border-gray-100 dark:border-white/5 pt-4 md:pt-0 md:pl-6">
+        <button
+          onClick={() => onUpdateStatus(item.id, item.status)}
+          disabled={actioningId === item.id}
+          className={`w-full py-2.5 px-4 rounded-xl font-bold text-xs transition-all flex items-center justify-center gap-2 ${
+            item.status === 'resolved'
+              ? 'bg-amber-500/10 hover:bg-amber-500/20 text-amber-600 dark:text-amber-400 border border-amber-500/20'
+              : 'bg-emerald-600 hover:opacity-90 text-white shadow-md'
+          }`}
+        >
+          {actioningId === item.id ? (
+            <Loader2 className="w-3.5 h-3.5 animate-spin" />
+          ) : item.status === 'resolved' ? (
+            'Mark Pending'
+          ) : (
+            'Mark Resolved'
+          )}
+        </button>
+
+        <button
+          onClick={() => onDelete(item.id)}
+          disabled={actioningId === item.id}
+          className="w-full py-2.5 px-4 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-600 dark:text-red-400 border border-red-500/20 font-bold text-xs transition-all flex items-center justify-center gap-2"
+        >
+          <Trash2 className="w-3.5 h-3.5" />
+          Delete
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function formatTimestamp2(ts: any): string {
+  if (!ts) return '';
+  if (ts?.toDate) return ts.toDate().toLocaleString();
+  if (ts?.seconds) return new Date(ts.seconds * 1000).toLocaleString();
+  return String(ts);
 }

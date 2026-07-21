@@ -221,7 +221,7 @@ export function Header() {
       setTimeout(() => {
         setSubmitSuccess(false);
         setIsFeedbackOpen(false);
-      }, 2000);
+      }, 4000);
     } catch (err: any) {
       console.error("Error submitting feedback:", err);
       setSubmitError("Failed to submit feedback. Please try again.");
@@ -492,14 +492,19 @@ export function Header() {
             </div>
 
             {submitSuccess ? (
-              <div className="py-8 flex flex-col items-center justify-center space-y-3">
-                <div className="w-12 h-12 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-500">
-                  <CheckCircle2 className="w-7 h-7" />
+              <div className="py-10 flex flex-col items-center justify-center space-y-4">
+                <div className="w-16 h-16 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-500">
+                  <CheckCircle2 className="w-9 h-9" />
                 </div>
-                <h4 className="text-sm font-bold text-gray-900 dark:text-white">Feedback Submitted!</h4>
-                <p className="text-xs text-gray-500 dark:text-[#8e8ca3] text-center max-w-xs">
-                  Thank you! Our development team is already looking into your feedback.
-                </p>
+                <div className="text-center space-y-2 max-w-xs">
+                  <h4 className="text-lg font-extrabold text-gray-900 dark:text-white">Thank You!</h4>
+                  <p className="text-sm font-semibold text-gray-700 dark:text-gray-300 leading-relaxed">
+                    Your valuable feedback has been received with great appreciation.
+                  </p>
+                  <p className="text-xs text-emerald-600 dark:text-emerald-400 font-bold">
+                    We are deeply grateful to you for helping us improve CybroTools.
+                  </p>
+                </div>
               </div>
             ) : (
               <form onSubmit={handleFeedbackSubmit} className="space-y-4">
