@@ -1,12 +1,9 @@
 {
-  "projectId": "docupdf-d46ab",
-  "appId": "1:685369450420:web:d053ee10d1f70f5cba5ce1",
-  "apiKey": "AIzaSyCcUsKQVL4kRsOTh_tVTiKvTP7JkhJRlXM",
-  "authDomain": "docupdf-d46ab.firebaseapp.com",
-  "firestoreDatabaseId": "ai-studio-aibackgroundremo-0e4a8414-64e7-4811-9c47-56abee4acd73",
-  "storageBucket": "docupdf-d46ab.firebasestorage.app",
-  "messagingSenderId": "685369450420",
-  "measurementId": "",
-  "oAuthClientId": "685369450420-e4ne4ji7hkdq4kamo13umeam0jiitequ.apps.googleusercontent.com",
-  "recaptchaSiteKey": ""
+  "projectId": "cybrotools",
+  "appId": "1:520972645994:web:f682b0e661eea81c3ebc13",
+  "apiKey": "AIzaSyBLxYV3872DS2ZLsdleN9MBacxVvOfU7Xc",
+  "authDomain": "cybrotools.firebaseapp.com",
+  "storageBucket": "cybrotools.firebasestorage.app",
+  "messagingSenderId": "520972645994",
+  "measurementId": "G-ESC1WS40FK"
 }
