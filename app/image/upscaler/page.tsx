@@ -214,8 +214,8 @@ export default function ImageUpscaler() {
 
           setAiProgress(0);
           upscaler.upscale(img, {
-            patchSize: 64,
-            padding: 2,
+            patchSize: 128,
+            padding: 8,
             progress: (percent: number) => {
               setAiProgress(Math.round(percent * 100));
             }
