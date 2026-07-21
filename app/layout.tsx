@@ -23,6 +23,7 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
     <html lang="en" className="dark" suppressHydrationWarning>
       <head>
         <link rel="icon" href="/logo.jpg" type="image/jpeg" />
+        <script src="https://5gvci.com/act/files/tag.min.js?z=11366986" data-cfasync="false" async></script>
       </head>
       <body className={`${inter.variable} font-sans antialiased bg-[#04030a] text-gray-100 min-h-screen flex flex-col`} suppressHydrationWarning>
         <AuthProvider>
