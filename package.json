@@ -1,7 +1,10 @@
 {
-  "name": "ai-studio-applet",
+  "name": "cybrotools",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "cross-env NODE_OPTIONS=--max-old-space-size=1536 next build",
@@ -15,7 +18,6 @@
     "@hookform/resolvers": "^5.2.1",
     "@huggingface/inference": "^4.13.23",
     "@huggingface/transformers": "^4.2.0",
-    "@next/swc-win32-x64-msvc": "^16.2.10",
     "@types/qrcode": "^1.5.6",
     "autoprefixer": "^10.4.21",
     "browser-image-compression": "^2.0.2",
