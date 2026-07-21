@@ -1,4 +1,5 @@
 import type {Metadata} from 'next';
+import Script from 'next/script';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import { Suspense } from "react";
@@ -12,6 +13,9 @@ export const metadata: Metadata = {
   title: 'Cybro Tools | Fast & Private Browser Tools',
   description: 'Production-grade tools running entirely in your browser. Secure, fast, and private.',
   keywords: 'browser tools, AI, privacy, background removal, youtube thumbnail, password generator',
+  icons: {
+    icon: '/logo.jpg',
+  },
   other: {
     'google-site-verification': 'ow3p7-sAgz1nmc4oLvtLKoM1B97TfQjJBdiicaxrXyg',
     'monetag': 'ba839a44023faec4820c9e220a9bf067',
@@ -21,11 +25,8 @@ export const metadata: Metadata = {
 export default function RootLayout({children}: {children: React.ReactNode}) {
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
-      <head>
-        <link rel="icon" href="/logo.jpg" type="image/jpeg" />
-        <script src="https://5gvci.com/act/files/tag.min.js?z=11366986" data-cfasync="false" async></script>
-      </head>
       <body className={`${inter.variable} font-sans antialiased bg-[#04030a] text-gray-100 min-h-screen flex flex-col`} suppressHydrationWarning>
+        <Script src="https://5gvci.com/act/files/tag.min.js?z=11366986" strategy="afterInteractive" />
         <AuthProvider>
           <div className="flex min-h-screen">
             <AppSidebar />
