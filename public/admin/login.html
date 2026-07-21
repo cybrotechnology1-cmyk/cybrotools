@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cybro Admin - Sign In</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-zinc-950 text-zinc-100 min-h-screen flex items-center justify-center p-6 font-sans antialiased">
+  <div class="w-full max-w-md space-y-6">
+    <!-- Logo & Header -->
+    <div class="text-center space-y-2">
+      <div class="inline-flex w-12 h-12 bg-blue-600 rounded-2xl items-center justify-center text-white font-bold text-2xl shadow-lg shadow-blue-500/20">
+        C
+      </div>
+      <h1 class="text-2xl font-bold tracking-tight">Access Cybro Admin</h1>
+      <p class="text-sm text-zinc-400">Sign in with your administrative credentials to manage nodes</p>
+    </div>
+
+    <!-- Card -->
+    <div class="bg-zinc-900 border border-zinc-800 rounded-3xl p-8 shadow-xl space-y-6">
+      <div id="error-box" class="p-4 bg-red-950/40 border border-red-900/50 text-red-400 rounded-xl text-xs hidden flex items-center gap-2">
+        <i data-lucide="shield-alert" class="w-4 h-4 flex-shrink-0"></i>
+        <span id="error-msg">Invalid username or password.</span>
+      </div>
+
+      <form id="login-form" class="space-y-4">
+        <div class="space-y-1.5">
+          <label for="username" class="text-xs font-semibold uppercase tracking-wider text-zinc-400">Username</label>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-zinc-500">
+              <i data-lucide="user" class="w-4 h-4"></i>
+            </span>
+            <input 
+              type="text" 
+              id="username" 
+              required
+              class="w-full bg-zinc-950 border border-zinc-800 rounded-xl py-3 pl-11 pr-4 text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30 transition-all"
+              placeholder="admin"
+            >
+          </div>
+        </div>
+
+        <div class="space-y-1.5">
+          <label for="password" class="text-xs font-semibold uppercase tracking-wider text-zinc-400">Password</label>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-zinc-500">
+              <i data-lucide="lock" class="w-4 h-4"></i>
+            </span>
+            <input 
+              type="password" 
+              id="password" 
+              required
+              class="w-full bg-zinc-950 border border-zinc-800 rounded-xl py-3 pl-11 pr-4 text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30 transition-all"
+              placeholder="••••••••••••"
+            >
+          </div>
+        </div>
+
+        <button 
+          type="submit" 
+          id="submit-btn"
+          class="w-full bg-blue-600 hover:bg-blue-500 text-white font-semibold py-3 rounded-xl shadow-lg shadow-blue-500/10 hover:shadow-blue-500/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2 mt-2"
+        >
+          <span>Sign In to Panel</span>
+          <i data-lucide="arrow-right" class="w-4 h-4"></i>
+        </button>
+      </form>
+    </div>
+
+    <!-- Footer Credit -->
+    <p class="text-center text-xs text-zinc-500">
+      Protected node session. Authorized personnel only.
+    </p>
+  </div>
+
+  <script>
+    // Redirect if already logged in
+    if (localStorage.getItem("cybro_admin_token")) {
+      window.location.href = "/admin/dashboard.html";
+    }
+
+    // Initialize lucide
+    lucide.createIcons();
+
+    const form = document.getElementById("login-form");
+    const errorBox = document.getElementById("error-box");
+    const errorMsg = document.getElementById("error-msg");
+    const submitBtn = document.getElementById("submit-btn");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+      
+      errorBox.classList.add("hidden");
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = `<span>Signing in...</span>`;
+
+      try {
+        const response = await fetch("/api/admin/auth", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username, password })
+        });
+
+        const data = await response.json();
+
+        if (response.ok && data.token) {
+          localStorage.setItem("cybro_admin_token", data.token);
+          window.location.href = "/admin/dashboard.html";
+        } else {
+          errorMsg.textContent = data.error || "Invalid username or password.";
+          errorBox.classList.remove("hidden");
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = `<span>Sign In to Panel</span><i data-lucide="arrow-right" class="w-4 h-4"></i>`;
+          lucide.createIcons();
+        }
+      } catch (err) {
+        errorMsg.textContent = "Unable to connect to the authentication server.";
+        errorBox.classList.remove("hidden");
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = `<span>Sign In to Panel</span><i data-lucide="arrow-right" class="w-4 h-4"></i>`;
+        lucide.createIcons();
+      }
+    });
+  </script>
+</body>
+</html>

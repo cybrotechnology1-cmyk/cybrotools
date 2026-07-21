@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cybro Admin - Platform Settings</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-gray-50 dark:bg-zinc-950 font-sans antialiased">
+  <div id="admin-layout-container" class="flex flex-col md:flex-row min-h-screen">
+    <!-- Sidebar dynamically injected here -->
+  </div>
+
+  <script type="module">
+    import { renderSidebar, adminFetch, showToast } from "./admin.js";
+
+    renderSidebar("settings");
+
+    const mainStage = document.getElementById("admin-main-stage");
+    let settings = null;
+
+    async function loadSettings() {
+      mainStage.innerHTML = `<div class="h-96 flex items-center justify-center text-gray-400 animate-pulse text-sm">Querying metadata profile...</div>`;
+      try {
+        const res = await adminFetch("/api/admin/settings");
+        settings = await res.json();
+        renderLayout();
+      } catch (err) {
+        showToast("Failed to fetch general settings.", "error");
+        mainStage.innerHTML = `<div class="p-6 bg-red-950/40 text-red-400 rounded-2xl">Could not retrieve configuration records. Ensure session authorization.</div>`;
+      }
+    }
+
+    function renderLayout() {
+      mainStage.innerHTML = `
+        <div class="space-y-8 animate-in fade-in duration-300">
+          <div>
+            <h2 class="text-xl font-bold tracking-tight">Website Profile & Branded Identity</h2>
+            <p class="text-xs text-gray-500 dark:text-zinc-400 mt-1">Manage global brand parameters, active footer notices, and client tracking scripts.</p>
+          </div>
+
+          <form id="settings-form" class="space-y-6 max-w-3xl bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-3xl p-6 md:p-8 shadow-sm">
+            <div class="flex items-center gap-2 pb-3 border-b border-gray-50 dark:border-zinc-800/60">
+              <i data-lucide="settings" class="w-5 h-5 text-blue-500"></i>
+              <h3 class="font-bold text-sm">General Global Settings</h3>
+            </div>
+
+            <div class="space-y-5">
+              <div class="space-y-1.5">
+                <label for="site-name" class="text-xs font-bold uppercase text-gray-400">Site Name / Platform Title</label>
+                <input 
+                  type="text" 
+                  id="site-name" 
+                  required
+                  class="w-full bg-gray-50 dark:bg-zinc-950 border border-gray-200 dark:border-zinc-800 rounded-xl py-3 px-4 text-sm focus:outline-none focus:border-blue-500"
+                  placeholder="e.g., Cybro Tools"
+                >
+              </div>
+
+              <div class="space-y-1.5">
+                <label for="site-description" class="text-xs font-bold uppercase text-gray-400">Default Site Tagline / Subtitle</label>
+                <textarea 
+                  id="site-description" 
+                  required
+                  rows="3"
+                  class="w-full bg-gray-50 dark:bg-zinc-950 border border-gray-200 dark:border-zinc-800 rounded-xl py-3 px-4 text-sm focus:outline-none focus:border-blue-500 resize-none"
+                  placeholder="e.g., A collection of powerful utilities running entirely in your browser..."
+                ></textarea>
+              </div>
+
+              <div class="space-y-1.5">
+                <label for="footer-text" class="text-xs font-bold uppercase text-gray-400">Copyright Footer Notice</label>
+                <input 
+                  type="text" 
+                  id="footer-text" 
+                  required
+                  class="w-full bg-gray-50 dark:bg-zinc-950 border border-gray-200 dark:border-zinc-800 rounded-xl py-3 px-4 text-sm focus:outline-none focus:border-blue-500"
+                  placeholder="e.g., Â© 2026 Cybro Tools. All rights reserved."
+                >
+              </div>
+
+              <div class="space-y-1.5 pb-2">
+                <label for="analytics-id" class="text-xs font-bold uppercase text-gray-400">Google Analytics ID (UA / G- Key)</label>
+                <div class="relative">
+                  <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-gray-400">
+                    <i data-lucide="bar-chart-2" class="w-4 h-4"></i>
+                  </span>
+                  <input 
+                    type="text" 
+                    id="analytics-id" 
+                    class="w-full bg-gray-50 dark:bg-zinc-950 border border-gray-200 dark:border-zinc-800 rounded-xl py-3 pl-11 pr-4 text-sm focus:outline-none focus:border-blue-500"
+                    placeholder="e.g., G-XXXXXXXXXX"
+                  >
+                </div>
+              </div>
+            </div>
+
+            <div class="pt-6 border-t border-gray-150 dark:border-zinc-800/60 flex items-center justify-end gap-3">
+              <button type="submit" class="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-sm font-bold shadow-lg shadow-blue-500/10 flex items-center gap-2">
+                <i data-lucide="save" class="w-4 h-4"></i>
+                <span>Apply Brand Configs</span>
+              </button>
+            </div>
+          </form>
+        </div>
+      `;
+
+      // Prefill fields
+      document.getElementById("site-name").value = settings.siteName;
+      document.getElementById("site-description").value = settings.siteDescription;
+      document.getElementById("footer-text").value = settings.footerText;
+      document.getElementById("analytics-id").value = settings.analyticsId;
+
+      // Event bindings
+      document.getElementById("settings-form").addEventListener("submit", handleFormSubmit);
+
+      lucide.createIcons();
+    }
+
+    async function handleFormSubmit(e) {
+      e.preventDefault();
+
+      const siteName = document.getElementById("site-name").value;
+      const siteDescription = document.getElementById("site-description").value;
+      const footerText = document.getElementById("footer-text").value;
+      const analyticsId = document.getElementById("analytics-id").value;
+
+      try {
+        const res = await adminFetch("/api/admin/settings", {
+          method: "POST",
+          body: JSON.stringify({
+            siteName,
+            siteDescription,
+            footerText,
+            analyticsId
+          })
+        });
+
+        if (res.ok) {
+          showToast("Website brand profiles saved successfully.");
+          loadSettings();
+        } else {
+          showToast("Failed to update general settings.", "error");
+        }
+      } catch (err) {
+        showToast("Error processing request.", "error");
+      }
+    }
+
+    // Initial load
+    loadSettings();
+  </script>
+</body>
+</html>

@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cybro Admin - Categories</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-gray-50 dark:bg-zinc-950 font-sans antialiased">
+  <div id="admin-layout-container" class="flex flex-col md:flex-row min-h-screen">
+    <!-- Sidebar dynamically injected here -->
+  </div>
+
+  <script type="module">
+    import { renderSidebar, adminFetch, showToast } from "./admin.js";
+
+    renderSidebar("categories");
+
+    const mainStage = document.getElementById("admin-main-stage");
+    let categories = [];
+    let editingId = null;
+
+    async function loadCategories() {
+      mainStage.innerHTML = `<div class="h-96 flex items-center justify-center text-gray-400 animate-pulse text-sm">Querying taxonomy structures...</div>`;
+      try {
+        const res = await adminFetch("/api/admin/categories");
+        categories = await res.json();
+        renderLayout();
+      } catch (err) {
+        showToast("Failed to fetch categories.", "error");
+        mainStage.innerHTML = `<div class="p-6 bg-red-950/40 text-red-400 rounded-2xl">Could not retrieve taxonomy files. Ensure session authorization.</div>`;
+      }
+    }
+
+    function renderLayout() {
+      mainStage.innerHTML = `
+        <div class="space-y-6 animate-in fade-in duration-300">
+          <div>
+            <h2 class="text-xl font-bold tracking-tight">Post Taxonomies</h2>
+            <p class="text-xs text-gray-500 dark:text-zinc-400 mt-1">Configure structural categories to filter blog guides and assets.</p>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Form Column (1/3) -->
+            <div class="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-3xl p-6 h-fit space-y-4">
+              <h3 class="font-bold text-gray-900 dark:text-white" id="form-title">
+                ${editingId ? "Modify Category" : "Add New Category"}
+              </h3>
+              
+              <form id="category-form" class="space-y-4">
+                <div class="space-y-1.5">
+                  <label for="cat-name" class="text-xs font-bold uppercase text-gray-400">Category Name</label>
+                  <input 
+                    type="text" 
+                    id="cat-name" 
+                    required
+                    class="w-full bg-gray-50 dark:bg-zinc-950 border border-gray-200 dark:border-zinc-800 rounded-xl py-3 px-4 text-sm focus:outline-none focus:border-blue-500"
+                    placeholder="e.g., Artificial Intelligence"
+                  >
+                </div>
+
+                <div class="space-y-1.5">
+                  <label for="cat-slug" class="text-xs font-bold uppercase text-gray-400">Slug Identifier</label>
+                  <input 
+                    type="text" 
+                    id="cat-slug" 
+                    required
+                    class="w-full bg-gray-50 dark:bg-zinc-950 border border-gray-200 dark:border-zinc-800 rounded-xl py-3 px-4 text-sm focus:outline-none focus:border-blue-500"
+                    placeholder="e.g., artificial-intelligence"
+                  >
+                </div>
+
+                <div class="pt-2 flex items-center gap-2">
+                  ${editingId ? `
+                    <button type="button" id="cancel-edit-btn" class="flex-1 py-3 border border-gray-200 dark:border-zinc-800 hover:bg-gray-100 dark:hover:bg-zinc-850 rounded-xl text-sm font-semibold text-gray-600 dark:text-zinc-400">
+                      Cancel
+                    </button>
+                  ` : ""}
+                  <button type="submit" class="flex-1 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-sm font-bold shadow-lg shadow-blue-500/10">
+                    ${editingId ? "Update Category" : "Publish Category"}
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            <!-- List Column (2/3) -->
+            <div class="lg:col-span-2 bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-3xl overflow-hidden shadow-sm">
+              <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                  <thead>
+                    <tr class="bg-gray-50 dark:bg-zinc-950 border-b border-gray-100 dark:border-zinc-800 text-xs font-bold text-gray-500 uppercase tracking-wider">
+                      <th class="py-4 px-6">Category Name</th>
+                      <th class="py-4 px-6">Slug URL Key</th>
+                      <th class="py-4 px-6 text-right">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-gray-100 dark:divide-zinc-800/80 text-sm">
+                    ${categories.map(cat => `
+                      <tr class="hover:bg-gray-50/50 dark:hover:bg-zinc-950/40 transition-colors">
+                        <td class="py-4 px-6 font-semibold text-gray-900 dark:text-white">${cat.name}</td>
+                        <td class="py-4 px-6 text-gray-500 font-mono text-xs">${cat.slug}</td>
+                        <td class="py-4 px-6 text-right">
+                          <div class="inline-flex gap-2">
+                            <button data-id="${cat.id}" class="edit-btn p-1.5 rounded-lg border border-gray-200 dark:border-zinc-800 text-gray-500 dark:text-zinc-400 hover:bg-gray-100 dark:hover:bg-zinc-850 hover:text-blue-600 dark:hover:text-blue-400" title="Edit">
+                              <i data-lucide="edit-3" class="w-4 h-4"></i>
+                            </button>
+                            <button data-id="${cat.id}" class="delete-btn p-1.5 rounded-lg border border-gray-200 dark:border-zinc-800 text-gray-500 dark:text-zinc-400 hover:bg-red-50 dark:hover:bg-red-950/30 hover:text-red-600 dark:hover:text-red-400" title="Delete">
+                              <i data-lucide="trash-2" class="w-4 h-4"></i>
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    `).join("")}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+
+      // Auto-generate slug when typing name (if not in edit mode with a custom slug)
+      const nameInput = document.getElementById("cat-name");
+      const slugInput = document.getElementById("cat-slug");
+      nameInput.addEventListener("input", () => {
+        if (!editingId) {
+          slugInput.value = nameInput.value
+            .toLowerCase()
+            .replace(/[^a-z0-9\s-]/g, "")
+            .replace(/\s+/g, "-")
+            .replace(/-+/g, "-");
+        }
+      });
+
+      // Bind events
+      document.getElementById("category-form").addEventListener("submit", handleFormSubmit);
+
+      if (editingId) {
+        document.getElementById("cancel-edit-btn").addEventListener("click", () => {
+          editingId = null;
+          renderLayout();
+        });
+      }
+
+      document.querySelectorAll(".edit-btn").forEach(btn => {
+        btn.addEventListener("click", (e) => {
+          const id = e.currentTarget.dataset.id;
+          startEdit(id);
+        });
+      });
+
+      document.querySelectorAll(".delete-btn").forEach(btn => {
+        btn.addEventListener("click", (e) => {
+          const id = e.currentTarget.dataset.id;
+          deleteCategory(id);
+        });
+      });
+
+      lucide.createIcons();
+    }
+
+    function startEdit(id) {
+      const cat = categories.find(c => c.id === id);
+      if (!cat) return;
+
+      editingId = id;
+      renderLayout();
+
+      document.getElementById("cat-name").value = cat.name;
+      document.getElementById("cat-slug").value = cat.slug;
+    }
+
+    async function deleteCategory(id) {
+      const cat = categories.find(c => c.id === id);
+      if (!cat) return;
+
+      if (!confirm(`Are you sure you want to delete category "${cat.name}"? This will not delete blog articles associated with it, but we recommend double-checking.`)) return;
+
+      try {
+        const res = await adminFetch(`/api/admin/categories?id=${id}`, {
+          method: "DELETE"
+        });
+
+        if (res.ok) {
+          showToast("Category removed successfully.");
+          loadCategories();
+        } else {
+          showToast("Failed to remove category.", "error");
+        }
+      } catch (err) {
+        showToast("Error processing request.", "error");
+      }
+    }
+
+    async function handleFormSubmit(e) {
+      e.preventDefault();
+
+      const name = document.getElementById("cat-name").value;
+      const slug = document.getElementById("cat-slug").value;
+
+      const payload = { name, slug };
+      if (editingId) payload.id = editingId;
+
+      const method = editingId ? "PUT" : "POST";
+
+      try {
+        const res = await adminFetch("/api/admin/categories", {
+          method,
+          body: JSON.stringify(payload)
+        });
+
+        if (res.ok) {
+          showToast(editingId ? "Category updated successfully." : "Category created successfully.");
+          editingId = null;
+          loadCategories();
+        } else {
+          showToast("Failed to save category.", "error");
+        }
+      } catch (err) {
+        showToast("Error processing request.", "error");
+      }
+    }
+
+    // Initial load
+    loadCategories();
+  </script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+{
+  "collections": {
+    "feedback": {
+      "schema": {
+        "userId": "string",
+        "userEmail": "string",
+        "userName": "string",
+        "category": "string",
+        "text": "string",
+        "createdAt": "timestamp",
+        "status": "string"
+      },
+      "indexes": [
+        {
+          "fields": [
+            { "fieldPath": "createdAt", "order": "DESCENDING" }
+          ]
+        }
+      ]
+    },
+    "users": {
+      "schema": {
+        "uid": "string",
+        "email": "string",
+        "displayName": "string",
+        "photoURL": "string",
+        "lastLogin": "timestamp"
+      }
+    },
+    "notifications": {
+      "schema": {
+        "title": "string",
+        "message": "string",
+        "category": "string",
+        "link": "string",
+        "createdAt": "timestamp"
+      },
+      "indexes": [
+        {
+          "fields": [
+            { "fieldPath": "createdAt", "order": "DESCENDING" }
+          ]
+        }
+      ]
+    }
+  }
+}

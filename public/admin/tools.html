@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cybro Admin - Tool Control</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-gray-50 dark:bg-zinc-950 font-sans antialiased">
+  <div id="admin-layout-container" class="flex flex-col md:flex-row min-h-screen">
+    <!-- Sidebar dynamically injected here -->
+  </div>
+
+  <script type="module">
+    import { renderSidebar, adminFetch, showToast } from "./admin.js";
+
+    renderSidebar("tools");
+
+    const mainStage = document.getElementById("admin-main-stage");
+    let tools = [];
+
+    async function loadTools() {
+      mainStage.innerHTML = `<div class="h-96 flex items-center justify-center text-gray-400 animate-pulse text-sm">Querying active service nodes...</div>`;
+      try {
+        const res = await adminFetch("/api/admin/tools");
+        tools = await res.json();
+        renderLayout();
+      } catch (err) {
+        showToast("Failed to fetch tools directory.", "error");
+        mainStage.innerHTML = `<div class="p-6 bg-red-950/40 text-red-400 rounded-2xl">Could not retrieve node configurations. Ensure administrative session.</div>`;
+      }
+    }
+
+    function renderLayout() {
+      // Group tools by category
+      const grouped = tools.reduce((acc, tool) => {
+        if (!acc[tool.category]) acc[tool.category] = [];
+        acc[tool.category].push(tool);
+        return acc;
+      }, {});
+
+      mainStage.innerHTML = `
+        <div class="space-y-8 animate-in fade-in duration-300">
+          <div class="flex items-center justify-between flex-wrap gap-4">
+            <div>
+              <h2 class="text-xl font-bold tracking-tight">Active Platform Nodes</h2>
+              <p class="text-xs text-gray-500 dark:text-zinc-400 mt-1">Activate, disable, or modify display descriptors of utilities rendered on the home page.</p>
+            </div>
+            
+            <button id="save-tools-btn" class="px-5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-sm font-bold flex items-center gap-2 shadow-lg shadow-blue-500/10 transition-all">
+              <i data-lucide="save" class="w-4 h-4"></i>
+              <span>Save Configurations</span>
+            </button>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            ${Object.entries(grouped).map(([category, items]) => `
+              <div class="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-3xl p-6 space-y-4 shadow-sm">
+                <div class="flex items-center justify-between pb-2 border-b border-gray-50 dark:border-zinc-800/60">
+                  <h3 class="font-bold text-sm text-gray-900 dark:text-white flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 bg-blue-600 rounded-full"></span>
+                    <span>${category}</span>
+                  </h3>
+                  <span class="text-[11px] font-bold text-gray-400 bg-gray-50 dark:bg-zinc-850 px-2.5 py-0.5 rounded-lg border border-gray-100 dark:border-zinc-800/40">${items.length} Nodes</span>
+                </div>
+
+                <div class="space-y-4 divide-y divide-gray-100/40 dark:divide-zinc-800/40">
+                  ${items.map(item => `
+                    <div class="flex items-center justify-between pt-4 first:pt-0 gap-4" data-id="${item.id}">
+                      <div class="flex-1 space-y-2">
+                        <!-- Input edit label -->
+                        <div class="flex items-center gap-2">
+                          <input 
+                            type="text" 
+                            value="${item.name}" 
+                            data-field="name"
+                            class="name-input bg-transparent border-b border-transparent hover:border-gray-300 dark:hover:border-zinc-700 focus:border-blue-500 py-0.5 px-1 font-semibold text-sm text-gray-900 dark:text-zinc-100 focus:outline-none transition-all w-full max-w-xs"
+                          >
+                        </div>
+                        <span class="text-[10px] text-gray-400 font-mono block px-1">${item.href}</span>
+                      </div>
+
+                      <!-- Toggle switch -->
+                      <div class="flex items-center gap-3">
+                        <span class="status-label text-[11px] font-bold ${item.enabled ? "text-emerald-500" : "text-gray-400"}">
+                          ${item.enabled ? "ACTIVE" : "DISABLED"}
+                        </span>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                          <input 
+                            type="checkbox" 
+                            class="enabled-toggle sr-only peer" 
+                            ${item.enabled ? "checked" : ""}
+                          >
+                          <div class="w-11 h-6 bg-zinc-200 dark:bg-zinc-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                        </label>
+                      </div>
+                    </div>
+                  `).join("")}
+                </div>
+              </div>
+            `).join("")}
+          </div>
+        </div>
+      `;
+
+      // Event bindings
+      document.getElementById("save-tools-btn").addEventListener("click", saveToolsConfig);
+
+      // Status toggle changes
+      document.querySelectorAll(".enabled-toggle").forEach(toggle => {
+        toggle.addEventListener("change", (e) => {
+          const row = e.target.closest("[data-id]");
+          const id = row.dataset.id;
+          const statusLabel = row.querySelector(".status-label");
+          
+          const isChecked = e.target.checked;
+          
+          // Update local data state
+          const tool = tools.find(t => t.id === id);
+          if (tool) {
+            tool.enabled = isChecked;
+          }
+
+          if (isChecked) {
+            statusLabel.textContent = "ACTIVE";
+            statusLabel.className = "status-label text-[11px] font-bold text-emerald-500";
+          } else {
+            statusLabel.textContent = "DISABLED";
+            statusLabel.className = "status-label text-[11px] font-bold text-gray-400";
+          }
+        });
+      });
+
+      // Name edits
+      document.querySelectorAll(".name-input").forEach(input => {
+        input.addEventListener("change", (e) => {
+          const id = e.target.closest("[data-id]").dataset.id;
+          const tool = tools.find(t => t.id === id);
+          if (tool) {
+            tool.name = e.target.value;
+          }
+        });
+      });
+
+      lucide.createIcons();
+    }
+
+    async function saveToolsConfig() {
+      const btn = document.getElementById("save-tools-btn");
+      btn.disabled = true;
+      btn.innerHTML = `<span>Saving...</span>`;
+
+      try {
+        const res = await adminFetch("/api/admin/tools", {
+          method: "POST",
+          body: JSON.stringify(tools)
+        });
+
+        btn.disabled = false;
+        btn.innerHTML = `<i data-lucide="save" class="w-4 h-4"></i><span>Save Configurations</span>`;
+        lucide.createIcons();
+
+        if (res.ok) {
+          showToast("Homepage tool statuses updated successfully.");
+          loadTools();
+        } else {
+          showToast("Failed to save tool statuses.", "error");
+        }
+      } catch (err) {
+        btn.disabled = false;
+        btn.innerHTML = `<i data-lucide="save" class="w-4 h-4"></i><span>Save Configurations</span>`;
+        lucide.createIcons();
+        showToast("Error processing request.", "error");
+      }
+    }
+
+    // Initial load
+    loadTools();
+  </script>
+</body>
+</html>

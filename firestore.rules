@@ -1,0 +1,32 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Admin check
+    function isAdmin() {
+      return request.auth != null && (
+        request.auth.token.email == "mdiismaiofficial101@gmail.com"
+      );
+    }
+
+    match /feedback/{feedbackId} {
+      // Anyone can submit feedback
+      allow create: if true;
+      // Only the admin can view, edit, or delete feedback
+      allow read, update, delete: if isAdmin();
+    }
+
+    match /users/{userId} {
+      // Anyone can see or read users if logged in or admin
+      allow read: if request.auth != null && (request.auth.uid == userId || isAdmin());
+      // A user can create or update their own profile, or admin can update it
+      allow write: if request.auth != null && (request.auth.uid == userId || isAdmin());
+    }
+
+    match /notifications/{notificationId} {
+      // Anyone can read notifications
+      allow read: if true;
+      // Only the admin can write, edit, or delete notifications
+      allow write: if isAdmin();
+    }
+  }
+}

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Cybro Admin - Redirecting...</title>
+  <script>
+    const token = localStorage.getItem("cybro_admin_token");
+    if (token) {
+      window.location.href = "/admin/dashboard.html";
+    } else {
+      window.location.href = "/admin/login.html";
+    }
+  </script>
+</head>
+<body style="background: #09090b; color: #a1a1aa; font-family: sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0;">
+  <p>Loading administrative dashboard...</p>
+</body>
+</html>

@@ -1,0 +1,6 @@
+{
+  "name": "AI Background Remover",
+  "description": "Production-grade background removal running entirely in your browser using cybro2.50 (Classic cybro AI). Fast, secure, and private.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

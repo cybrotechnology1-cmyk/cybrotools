@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cybro Admin - Blog Posts</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-gray-50 dark:bg-zinc-950 font-sans antialiased">
+  <div id="admin-layout-container" class="flex flex-col md:flex-row min-h-screen">
+    <!-- Sidebar dynamically injected here -->
+  </div>
+
+  <!-- Edit/Create Post Slide-over / Modal -->
+  <div id="post-modal" class="fixed inset-0 z-50 overflow-hidden hidden bg-black/60 backdrop-blur-sm transition-all duration-300 opacity-0 flex justify-end">
+    <div id="post-modal-content" class="w-full max-w-2xl bg-white dark:bg-zinc-900 border-l border-gray-200 dark:border-zinc-800 h-full flex flex-col transform translate-x-full transition-transform duration-300 shadow-2xl">
+      <div class="px-6 py-5 border-b border-gray-100 dark:border-zinc-800 flex items-center justify-between flex-shrink-0">
+        <h3 id="modal-title" class="font-bold text-lg text-gray-900 dark:text-white">Compose Blog Article</h3>
+        <button id="close-modal" class="p-1.5 rounded-xl text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-zinc-800">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <form id="post-form" class="flex-1 overflow-y-auto p-6 space-y-5">
+        <input type="hidden" id="post-id">
+
+        <div class="space-y-1.5">
+          <label for="post-title" class="text-xs font-bold uppercase text-gray-400">Post Title</label>
+          <input 
+            type="text" 
+            id="post-title" 
+            required
+            class="w-full bg-gray-50 dark:bg-zinc-950 border border-gray-200 dark:border-zinc-800 rounded-xl py-3 px-4 text-sm focus:outline-none focus:border-blue-500"
+            placeholder="e.g., How to optimize image performance"
+          >
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="space-y-1.5">
+            <label for="post-category" class="text-xs font-bold uppercase text-gray-400">Category</label>
+            <select 
+              id="post-category" 
+              required
+              class="w-full bg-gray-50 dark:bg-zinc-950 border border-gray-200 dark:border-zinc-800 rounded-xl py-3 px-4 text-sm focus:outline-none focus:border-blue-500"
+            >
+              <!-- Populated dynamically -->
+            </select>
+          </div>
+
+          <div class="space-y-1.5">
+            <label for="post-readtime" class="text-xs font-bold uppercase text-gray-400">Read Time</label>
+            <input 
+              type="text" 
+              id="post-readtime" 
+              required
+              class="w-full bg-gray-50 dark:bg-zinc-950 border border-gray-200 dark:border-zinc-800 rounded-xl py-3 px-4 text-sm focus:outline-none focus:border-blue-500"
+              placeholder="e.g., 5 min read"
+            >
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="space-y-1.5">
+            <label for="post-author" class="text-xs font-bold uppercase text-gray-400">Author</label>
+            <input 
+              type="text" 
+              id="post-author" 
+              required
+              class="w-full bg-gray-50 dark:bg-zinc-950 border border-gray-200 dark:border-zinc-800 rounded-xl py-3 px-4 text-sm focus:outline-none focus:border-blue-500"
+              placeholder="e.g., Jane Doe"
+            >
+          </div>
+          
+          <div class="space-y-1.5">
+            <label for="post-date-override" class="text-xs font-bold uppercase text-gray-400">Date Override (Optional)</label>
+            <input 
+              type="text" 
+              id="post-date-override" 
+              class="w-full bg-gray-50 dark:bg-zinc-950 border border-gray-200 dark:border-zinc-800 rounded-xl py-3 px-4 text-sm focus:outline-none focus:border-blue-500"
+              placeholder="e.g., July 18, 2026"
+            >
+          </div>
+        </div>
+
+        <div class="space-y-1.5">
+          <label for="post-excerpt" class="text-xs font-bold uppercase text-gray-400">Short Excerpt</label>
+          <textarea 
+            id="post-excerpt" 
+            required
+            rows="3"
+            class="w-full bg-gray-50 dark:bg-zinc-950 border border-gray-200 dark:border-zinc-800 rounded-xl py-3 px-4 text-sm focus:outline-none focus:border-blue-500 resize-none"
+            placeholder="Write a catchy 2-3 sentence summary..."
+          ></textarea>
+        </div>
+
+        <div class="space-y-1.5">
+          <label for="post-content" class="text-xs font-bold uppercase text-gray-400">Full Content (Markdown Supported)</label>
+          <textarea 
+            id="post-content" 
+            required
+            rows="10"
+            class="w-full bg-gray-50 dark:bg-zinc-950 border border-gray-200 dark:border-zinc-800 rounded-xl py-3 px-4 text-sm focus:outline-none focus:border-blue-500 font-sans"
+            placeholder="Write the full body content here..."
+          ></textarea>
+        </div>
+
+        <div class="pt-4 border-t border-gray-100 dark:border-zinc-800 flex items-center justify-end gap-3 flex-shrink-0">
+          <button type="button" id="cancel-btn" class="px-5 py-2.5 rounded-xl border border-gray-200 dark:border-zinc-800 text-sm font-semibold hover:bg-gray-100 dark:hover:bg-zinc-800 text-gray-600 dark:text-zinc-400">
+            Cancel
+          </button>
+          <button type="submit" id="submit-btn" class="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-sm font-bold shadow-lg shadow-blue-500/10">
+            Save Post
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script type="module">
+    import { renderSidebar, adminFetch, showToast } from "./admin.js";
+
+    renderSidebar("posts");
+
+    const mainStage = document.getElementById("admin-main-stage");
+    const modal = document.getElementById("post-modal");
+    const modalContent = document.getElementById("post-modal-content");
+    const postForm = document.getElementById("post-form");
+    const categorySelect = document.getElementById("post-category");
+
+    let posts = [];
+    let categories = [];
+
+    async function loadData() {
+      mainStage.innerHTML = `<div class="h-96 flex items-center justify-center text-gray-400 animate-pulse text-sm">Querying blog repository...</div>`;
+      try {
+        const postsRes = await adminFetch("/api/admin/blog");
+        posts = await postsRes.json();
+
+        const catRes = await adminFetch("/api/admin/categories");
+        categories = await catRes.json();
+
+        // Populate Category dropdown
+        categorySelect.innerHTML = categories.map(cat => `
+          <option value="${cat.name}">${cat.name}</option>
+        `).join("");
+
+        renderPostsList();
+      } catch (err) {
+        showToast("Failed to fetch blog records.", "error");
+        mainStage.innerHTML = `<div class="p-6 bg-red-950/40 text-red-400 rounded-2xl">Could not retrieve articles. Ensure administrative session.</div>`;
+      }
+    }
+
+    function renderPostsList() {
+      if (posts.length === 0) {
+        mainStage.innerHTML = `
+          <div class="text-center py-20 bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-3xl space-y-4">
+            <div class="w-16 h-16 bg-zinc-100 dark:bg-zinc-800 rounded-full flex items-center justify-center text-gray-400 mx-auto">
+              <i data-lucide="book-open" class="w-8 h-8"></i>
+            </div>
+            <div class="space-y-1">
+              <h3 class="font-bold text-lg">No Blog Posts Found</h3>
+              <p class="text-sm text-gray-500 max-w-sm mx-auto">Compose your first blog post and share insights with your visitors.</p>
+            </div>
+            <button id="add-post-btn-empty" class="px-5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-sm font-bold shadow-lg shadow-blue-500/10">
+              Create First Post
+            </button>
+          </div>
+        `;
+        document.getElementById("add-post-btn-empty")?.addEventListener("click", openAddModal);
+        lucide.createIcons();
+        return;
+      }
+
+      mainStage.innerHTML = `
+        <div class="space-y-6">
+          <div class="flex items-center justify-between">
+            <div>
+              <h2 class="text-xl font-bold tracking-tight">Active Publications</h2>
+              <p class="text-xs text-gray-500 dark:text-zinc-400 mt-1">Manage, update, or remove existing blog posts.</p>
+            </div>
+            <button id="add-post-btn" class="px-5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-sm font-bold flex items-center gap-2 shadow-lg shadow-blue-500/10">
+              <i data-lucide="plus" class="w-4 h-4"></i>
+              <span>Compose Post</span>
+            </button>
+          </div>
+
+          <div class="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-3xl overflow-hidden shadow-sm">
+            <div class="overflow-x-auto">
+              <table class="w-full text-left border-collapse">
+                <thead>
+                  <tr class="bg-gray-50 dark:bg-zinc-950 border-b border-gray-100 dark:border-zinc-800 text-xs font-bold text-gray-500 uppercase tracking-wider">
+                    <th class="py-4 px-6">Post Details</th>
+                    <th class="py-4 px-6">Category</th>
+                    <th class="py-4 px-6">Date</th>
+                    <th class="py-4 px-6">Read Time</th>
+                    <th class="py-4 px-6 text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100 dark:divide-zinc-800/80 text-sm">
+                  ${posts.map(post => `
+                    <tr class="hover:bg-gray-50/50 dark:hover:bg-zinc-950/40 transition-colors">
+                      <td class="py-4 px-6 max-w-sm">
+                        <div class="font-bold text-gray-900 dark:text-white line-clamp-1">${post.title}</div>
+                        <div class="text-xs text-gray-400 mt-1 flex items-center gap-1.5">
+                          <span>By ${post.author}</span>
+                          <span class="w-1 h-1 bg-gray-300 rounded-full"></span>
+                          <span class="line-clamp-1 flex-1">${post.excerpt}</span>
+                        </div>
+                      </td>
+                      <td class="py-4 px-6">
+                        <span class="px-2.5 py-0.5 bg-gray-100 dark:bg-zinc-800 text-gray-600 dark:text-zinc-400 rounded-full text-xs font-semibold">
+                          ${post.category}
+                        </span>
+                      </td>
+                      <td class="py-4 px-6 text-gray-500 font-mono text-xs">${post.date}</td>
+                      <td class="py-4 px-6 text-gray-500">${post.readTime}</td>
+                      <td class="py-4 px-6 text-right">
+                        <div class="inline-flex gap-2 justify-end">
+                          <button data-id="${post.id}" class="edit-btn p-1.5 rounded-lg border border-gray-200 dark:border-zinc-800 text-gray-500 dark:text-zinc-400 hover:bg-gray-100 dark:hover:bg-zinc-800 hover:text-blue-600 dark:hover:text-blue-400" title="Edit">
+                            <i data-lucide="edit-3" class="w-4 h-4"></i>
+                          </button>
+                          <button data-id="${post.id}" class="delete-btn p-1.5 rounded-lg border border-gray-200 dark:border-zinc-800 text-gray-500 dark:text-zinc-400 hover:bg-red-50 dark:hover:bg-red-950/30 hover:text-red-600 dark:hover:text-red-400" title="Delete">
+                            <i data-lucide="trash-2" class="w-4 h-4"></i>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  `).join("")}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      `;
+
+      // Event bindings
+      document.getElementById("add-post-btn")?.addEventListener("click", openAddModal);
+      
+      document.querySelectorAll(".edit-btn").forEach(btn => {
+        btn.addEventListener("click", (e) => {
+          const id = e.currentTarget.dataset.id;
+          openEditModal(id);
+        });
+      });
+
+      document.querySelectorAll(".delete-btn").forEach(btn => {
+        btn.addEventListener("click", (e) => {
+          const id = e.currentTarget.dataset.id;
+          deletePost(id);
+        });
+      });
+
+      lucide.createIcons();
+    }
+
+    function openModal() {
+      modal.classList.remove("hidden");
+      setTimeout(() => {
+        modal.classList.remove("opacity-0");
+        modal.classList.add("opacity-100");
+        modalContent.classList.remove("translate-x-full");
+        modalContent.classList.add("translate-x-0");
+      }, 10);
+    }
+
+    function closeModal() {
+      modalContent.classList.remove("translate-x-0");
+      modalContent.classList.add("translate-x-full");
+      modal.classList.remove("opacity-100");
+      modal.classList.add("opacity-0");
+      setTimeout(() => {
+        modal.classList.add("hidden");
+        postForm.reset();
+        document.getElementById("post-id").value = "";
+      }, 300);
+    }
+
+    function openAddModal() {
+      document.getElementById("modal-title").textContent = "Compose Blog Article";
+      document.getElementById("post-id").value = "";
+      document.getElementById("post-author").value = "Cybro Engineering Team";
+      document.getElementById("post-readtime").value = "5 min read";
+      document.getElementById("post-date-override").value = "";
+      openModal();
+    }
+
+    function openEditModal(id) {
+      const post = posts.find(p => p.id === id);
+      if (!post) return;
+
+      document.getElementById("modal-title").textContent = "Edit Blog Article";
+      document.getElementById("post-id").value = post.id;
+      document.getElementById("post-title").value = post.title;
+      document.getElementById("post-category").value = post.category;
+      document.getElementById("post-readtime").value = post.readTime;
+      document.getElementById("post-author").value = post.author;
+      document.getElementById("post-excerpt").value = post.excerpt;
+      document.getElementById("post-content").value = post.content;
+      document.getElementById("post-date-override").value = post.date || "";
+
+      openModal();
+    }
+
+    async function deletePost(id) {
+      const post = posts.find(p => p.id === id);
+      if (!post) return;
+
+      if (!confirm(`Are you sure you want to permanently delete: "${post.title}"?`)) return;
+
+      try {
+        const res = await adminFetch(`/api/admin/blog?id=${id}`, {
+          method: "DELETE"
+        });
+        if (res.ok) {
+          showToast("Article deleted successfully.");
+          loadData();
+        } else {
+          showToast("Failed to delete post.", "error");
+        }
+      } catch (err) {
+        showToast("Error processing request.", "error");
+      }
+    }
+
+    // Submit Handler
+    postForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const id = document.getElementById("post-id").value;
+      const title = document.getElementById("post-title").value;
+      const category = document.getElementById("post-category").value;
+      const readTime = document.getElementById("post-readtime").value;
+      const author = document.getElementById("post-author").value;
+      const excerpt = document.getElementById("post-excerpt").value;
+      const content = document.getElementById("post-content").value;
+      const dateOverride = document.getElementById("post-date-override").value;
+
+      const payload = { title, category, readTime, author, excerpt, content };
+      if (id) payload.id = id;
+      if (dateOverride) payload.date = dateOverride;
+
+      const method = id ? "PUT" : "POST";
+
+      try {
+        const res = await adminFetch("/api/admin/blog", {
+          method,
+          body: JSON.stringify(payload)
+        });
+
+        if (res.ok) {
+          showToast(id ? "Post updated successfully." : "Post published successfully.");
+          closeModal();
+          loadData();
+        } else {
+          showToast("Failed to save post.", "error");
+        }
+      } catch (err) {
+        showToast("Network error saving post.", "error");
+      }
+    });
+
+    document.getElementById("close-modal").addEventListener("click", closeModal);
+    document.getElementById("cancel-btn").addEventListener("click", closeModal);
+
+    // Initial load
+    loadData();
+
+    // Check for query parameters (?new=true)
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get("new") === "true") {
+      setTimeout(openAddModal, 400);
+    }
+  </script>
+</body>
+</html>
