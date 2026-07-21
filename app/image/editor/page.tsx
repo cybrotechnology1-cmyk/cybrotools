@@ -255,16 +255,6 @@ export default function ImageEditor() {
             ctx.filter = "none";
             ctx.drawImage(blurImg, -targetWidth / 2, -targetHeight / 2, targetWidth, targetHeight);
             ctx.restore();
-            if (blur > 0) {
-              const finalCanvas = document.createElement("canvas");
-              finalCanvas.width = finalWidth;
-              finalCanvas.height = finalHeight;
-              const fCtx = finalCanvas.getContext("2d")!;
-              fCtx.filter = `blur(${blur}px)`;
-              fCtx.drawImage(canvas, 0, 0);
-              ctx.clearRect(0, 0, finalWidth, finalHeight);
-              ctx.drawImage(finalCanvas, 0, 0);
-            }
             finishEdits(canvas, finalWidth, finalHeight);
             setBgBlurProcessing(false);
           };
