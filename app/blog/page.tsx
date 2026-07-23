@@ -66,6 +66,10 @@ export default function Blog() {
 
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
 
+  const relatedPosts = selectedPost
+    ? posts.filter(p => p.id !== selectedPost.id && p.category === selectedPost.category).slice(0, 3)
+    : [];
+
   const availableCategories = [
     "All",
     "AI Image Editing",
@@ -251,6 +255,40 @@ export default function Blog() {
               Browser-only tooling avoids server roundtrips, saves bandwidth, protects your files, and enables offline-first operation.
             </p>
           </div>
+
+          {/* Related Blog Posts */}
+          {relatedPosts.length > 0 && (
+            <div className="mt-10 space-y-4">
+              <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                <Sparkles className="w-4 h-4 text-purple-400" /> Related Articles
+              </h3>
+              <div className="grid gap-4 md:grid-cols-3">
+                {relatedPosts.map((rp) => (
+                  <div
+                    key={rp.id}
+                    className="bg-[#0a081e] border border-zinc-800 rounded-2xl p-4 hover:border-purple-500/40 hover:shadow-lg hover:shadow-purple-500/5 transition-all duration-300 cursor-pointer group"
+                    onClick={() => {
+                      setSelectedPost(rp);
+                      window.scrollTo({ top: 0, behavior: "smooth" });
+                    }}
+                  >
+                    {rp.coverImage && (
+                      <div className="rounded-xl overflow-hidden mb-3 border border-zinc-800">
+                        <img src={rp.coverImage} alt={rp.title} className="w-full h-32 object-cover group-hover:scale-105 transition-transform duration-500" />
+                      </div>
+                    )}
+                    <span className="px-2 py-0.5 bg-purple-500/10 text-purple-400 rounded-md text-[10px] font-semibold uppercase">{rp.category}</span>
+                    <h4 className="text-sm font-bold text-white mt-2 line-clamp-2 group-hover:text-purple-300 transition-colors">{rp.title}</h4>
+                    <p className="text-xs text-zinc-500 mt-1 line-clamp-2">{rp.excerpt}</p>
+                    <div className="flex items-center gap-2 mt-3 text-[10px] text-zinc-500">
+                      <span className="flex items-center gap-1"><Calendar className="w-3 h-3" /> {rp.date}</span>
+                      <span className="flex items-center gap-1"><Clock className="w-3 h-3" /> {rp.readTime}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       ) : (
         <div className="space-y-6">
