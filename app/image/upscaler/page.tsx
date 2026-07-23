@@ -6,6 +6,7 @@ import { useDropzone } from "react-dropzone";
 import Image from "next/image";
 import { addHistoryLog } from "@/app/lib/history";
 import { ToolSeoSection } from "@/components/ToolSeoSection";
+import { BannerAd } from "@/components/BannerAd";
 
 export default function ImageUpscaler() {
   const [originalUrl, setOriginalUrl] = useState<string | null>(null);
@@ -317,7 +318,7 @@ export default function ImageUpscaler() {
     if (!upscaledUrl) return;
     const a = document.createElement("a");
     a.href = upscaledUrl;
-    a.download = `cybro-upscaled-${scale}x.png`;
+    a.download = `cybro-upscaled-${scale}x_edited_by_cybrotools.png`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -355,6 +356,7 @@ export default function ImageUpscaler() {
 
   return (
     <div className="p-6 md:p-10 max-w-6xl mx-auto space-y-8 animate-in fade-in duration-500">
+      <BannerAd />
       <div>
         <h1 className="text-3xl font-bold tracking-tight mb-2 flex items-center gap-2">
           <Sparkles className="w-8 h-8 text-blue-500" />

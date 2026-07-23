@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Copy, FileText, Check, Layers, ArrowRightLeft } from "lucide-react";
 import { ToolSeoSection } from "@/components/ToolSeoSection";
+import { BannerAd } from "@/components/BannerAd";
 
 export default function TextUtils() {
   const [activeTab, setActiveTab] = useState<"counter" | "diff" | "lorem">("counter");
@@ -89,6 +90,7 @@ export default function TextUtils() {
 
   return (
     <div className="p-6 md:p-10 max-w-5xl mx-auto space-y-8">
+      <BannerAd />
       <div>
         <h1 className="text-2xl font-bold tracking-tight mb-2">Text & Content Utilities</h1>
         <p className="text-gray-500 dark:text-zinc-400">Manipulate, count, compare, and generate text directly in your web browser.</p>

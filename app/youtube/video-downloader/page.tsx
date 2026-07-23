@@ -24,6 +24,7 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { addHistoryLog } from "@/app/lib/history";
+import { BannerAd } from "@/components/BannerAd";
 
 interface DownloadFormat {
   id: string;
@@ -254,7 +255,7 @@ export default function VideoDownloader() {
             const downloadUrl = URL.createObjectURL(finalBlob);
             
             setCompletedFileUrl(downloadUrl);
-            const outName = `${videoTitle.replace(/\.[^/.]+$/, "")}_upscaled.${formatOpt.format}`;
+            const outName = `${videoTitle.replace(/\.[^/.]+$/, "")}_edited_by_cybrotools.${formatOpt.format}`;
             setCompletedFileName(outName);
             setIsProcessing(false);
             
@@ -327,7 +328,7 @@ export default function VideoDownloader() {
             
             // Construct direct, highly compatible, playable video URL via our proxy
             const cleanTitle = videoTitle.replace(/[^a-zA-Z0-9_\-\. ]/g, "_");
-            const outName = `${cleanTitle}_${formatOpt.badge.replace(/\s+/g, "_")}.${formatOpt.format}`;
+            const outName = `${cleanTitle}_edited_by_cybrotools.${formatOpt.format}`;
             
             const directUrl = `/api/video/download?url=${encodeURIComponent(url || "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4")}&name=${encodeURIComponent(outName)}&format=${formatOpt.format}&quality=${formatOpt.quality}`;
             
@@ -359,6 +360,7 @@ export default function VideoDownloader() {
 
   return (
     <div className="p-6 md:p-10 max-w-6xl mx-auto space-y-8 text-white">
+      <BannerAd />
       {/* Page Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-b border-[#1f1a4e] pb-6">
         <div>

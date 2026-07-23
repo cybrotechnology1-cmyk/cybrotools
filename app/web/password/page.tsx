@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { Copy, RefreshCw, Check, ShieldAlert, ShieldCheck } from "lucide-react";
 import { ToolSeoSection } from "@/components/ToolSeoSection";
+import { BannerAd } from "@/components/BannerAd";
 
 export default function PasswordGenerator() {
   const [password, setPassword] = useState("");
@@ -108,6 +109,7 @@ export default function PasswordGenerator() {
 
   return (
     <div className="p-6 md:p-10 max-w-5xl mx-auto space-y-8">
+      <BannerAd />
       <div>
         <h1 className="text-2xl font-bold tracking-tight mb-2">Password Utilities</h1>
         <p className="text-gray-500 dark:text-zinc-400">Generate secure passwords or check password strength instantly in your browser.</p>

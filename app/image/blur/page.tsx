@@ -5,6 +5,7 @@ import { UploadCloud, Image as ImageIcon, Download, Sliders, RefreshCw, Eye, Mov
 import { useDropzone } from "react-dropzone";
 import { addHistoryLog } from "@/app/lib/history";
 import { ToolSeoSection } from "@/components/ToolSeoSection";
+import { BannerAd } from "@/components/BannerAd";
 
 export default function ImageBlur() {
   const [originalUrl, setOriginalUrl] = useState<string | null>(null);
@@ -179,7 +180,7 @@ export default function ImageBlur() {
 
     const a = document.createElement("a");
     a.href = blurredUrl;
-    a.download = `cybro-blurred-${blurType}.png`;
+    a.download = `cybro-blurred-${blurType}_edited_by_cybrotools.png`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -218,6 +219,7 @@ export default function ImageBlur() {
 
   return (
     <div className="p-6 md:p-10 max-w-6xl mx-auto space-y-8 animate-in fade-in duration-500">
+      <BannerAd />
       <div>
         <h1 className="text-3xl font-bold tracking-tight mb-2 flex items-center gap-2">
           <Eye className="w-8 h-8 text-purple-500 animate-pulse" />

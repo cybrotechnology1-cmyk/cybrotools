@@ -5,6 +5,7 @@ import { Download, Search, AlertCircle, Eye, RefreshCw, Layers } from "lucide-re
 import Image from "next/image";
 import { addHistoryLog } from "@/app/lib/history";
 import { ToolSeoSection } from "@/components/ToolSeoSection";
+import { BannerAd } from "@/components/BannerAd";
 
 export default function YouTubeThumbnail() {
   const [url, setUrl] = useState("");
@@ -58,7 +59,7 @@ export default function YouTubeThumbnail() {
       const blobUrl = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = blobUrl;
-      a.download = `youtube-thumbnail-${quality}.jpg`;
+      a.download = `youtube-thumbnail-${quality}_edited_by_cybrotools.jpg`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
@@ -85,6 +86,7 @@ export default function YouTubeThumbnail() {
 
   return (
     <div className="p-6 md:p-10 max-w-5xl mx-auto space-y-8">
+      <BannerAd />
       <div>
         <h1 className="text-2xl font-bold tracking-tight mb-2">YouTube Thumbnail Studio</h1>
         <p className="text-gray-500 dark:text-zinc-400">Extract, preview, analyze and download multiple qualities of YouTube thumbnails.</p>

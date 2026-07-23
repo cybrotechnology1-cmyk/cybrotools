@@ -5,6 +5,7 @@ import { UploadCloud, Download, Sliders, Type, Grid, RefreshCw, AlertCircle, Spa
 import { useDropzone } from "react-dropzone";
 import Image from "next/image";
 import { ToolSeoSection } from "@/components/ToolSeoSection";
+import { BannerAd } from "@/components/BannerAd";
 
 export default function WatermarkPage() {
   const [file, setFile] = useState<File | null>(null);
@@ -112,7 +113,7 @@ export default function WatermarkPage() {
   const handleDownload = () => {
     if (!previewUrl) return;
     const link = document.createElement("a");
-    link.download = `watermarked_${file?.name || "image.png"}`;
+    link.download = `watermarked_${file?.name || "image"}_edited_by_cybrotools.png`;
     link.href = previewUrl;
     link.click();
   };
@@ -125,6 +126,7 @@ export default function WatermarkPage() {
 
   return (
     <div id="watermark-container" className="p-6 md:p-10 max-w-6xl mx-auto space-y-8">
+      <BannerAd />
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold tracking-tight mb-2">Watermark Adder</h1>

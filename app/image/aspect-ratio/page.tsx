@@ -5,6 +5,7 @@ import { UploadCloud, Download, Sliders, RefreshCw, Sparkles, Crop } from "lucid
 import { useDropzone } from "react-dropzone";
 import Image from "next/image";
 import { ToolSeoSection } from "@/components/ToolSeoSection";
+import { BannerAd } from "@/components/BannerAd";
 
 type RatioItem = {
   name: string;
@@ -121,7 +122,7 @@ export default function AspectRatioConverterPage() {
   const handleDownload = () => {
     if (!previewUrl) return;
     const link = document.createElement("a");
-    link.download = `ratio_${selectedRatio.w}x${selectedRatio.h}_${file?.name || "image.png"}`;
+    link.download = `ratio_${selectedRatio.w}x${selectedRatio.h}_${file?.name || "image"}_edited_by_cybrotools.png`;
     link.href = previewUrl;
     link.click();
   };
@@ -134,6 +135,7 @@ export default function AspectRatioConverterPage() {
 
   return (
     <div id="aspect-ratio-container" className="p-6 md:p-10 max-w-6xl mx-auto space-y-8">
+      <BannerAd />
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold tracking-tight mb-2">Aspect Ratio Converter</h1>

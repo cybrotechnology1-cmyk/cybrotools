@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cybro Admin - Sign In</title>
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#3b82f6">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
 </head>
@@ -126,6 +128,11 @@
         lucide.createIcons();
       }
     });
+  </script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js', { scope: '/' });
+    }
   </script>
 </body>
 </html>

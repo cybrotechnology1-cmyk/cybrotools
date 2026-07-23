@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { Copy, Eye, Shuffle, RefreshCw } from "lucide-react";
 import { ToolSeoSection } from "@/components/ToolSeoSection";
+import { BannerAd } from "@/components/BannerAd";
 
 export default function ColorTools() {
   const [copied, setCopied] = useState(false);
@@ -87,6 +88,7 @@ export default function ColorTools() {
 
   return (
     <div className="p-6 md:p-10 max-w-4xl mx-auto space-y-8">
+      <BannerAd />
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold tracking-tight mb-2">Color Tools & Palette Generator</h1>

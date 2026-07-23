@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Search, Code, Copy, Check, Eye } from "lucide-react";
 import { ToolSeoSection } from "@/components/ToolSeoSection";
+import { BannerAd } from "@/components/BannerAd";
 
 export default function EmbedGenerator() {
   const [url, setUrl] = useState("");
@@ -58,6 +59,7 @@ export default function EmbedGenerator() {
 
   return (
     <div className="p-6 md:p-10 max-w-4xl mx-auto space-y-8">
+      <BannerAd />
       <div>
         <h1 className="text-2xl font-bold tracking-tight mb-2">YouTube Embed Generator</h1>
         <p className="text-gray-500 dark:text-zinc-400">Generate responsive iframe embed codes with custom player configurations.</p>

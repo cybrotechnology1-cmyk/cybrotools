@@ -18,6 +18,7 @@ import {
 import { addHistoryLog } from "@/app/lib/history";
 import Image from "next/image";
 import { ToolSeoSection } from "@/components/ToolSeoSection";
+import { BannerAd } from "@/components/BannerAd";
 
 type OCRMode = "standard" | "table" | "handwriting" | "structured";
 
@@ -118,7 +119,7 @@ export default function OCRTool() {
       const element = document.createElement("a");
       const file = new Blob([extractedText], { type: "text/plain" });
       element.href = URL.createObjectURL(file);
-      element.download = `extracted_text_${Date.now()}.txt`;
+      element.download = `extracted_text_edited_by_cybrotools.txt`;
       document.body.appendChild(element);
       element.click();
       document.body.removeChild(element);
@@ -127,6 +128,7 @@ export default function OCRTool() {
 
   return (
     <div className="p-6 md:p-10 max-w-5xl mx-auto space-y-8 animate-in fade-in duration-500">
+      <BannerAd />
       <div>
         <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white flex items-center gap-2.5">
           <Sparkles className="w-8 h-8 text-blue-500" /> AI OCR Text Extractor

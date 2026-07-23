@@ -41,9 +41,9 @@ const defaultTools = [
     title: "AI Image Tools",
     description: "Browser-based AI models for image manipulation.",
     items: [
-      { name: "Background Remover", href: "/ai/bg-remover", icon: "Wand2", desc: "Remove background from images with AI in 1 click." },
-      { name: "Image Upscaler", href: "/image/upscaler", icon: "Wand2-blue", desc: "Upscale your images 2x, 4x with AI perfection." },
-      { name: "AI OCR Reader", href: "/ai/ocr", icon: "Sparkles", desc: "Extract structured text from any image file instantly." },
+      { name: "AI Background Remover", href: "/ai/bg-remover", icon: "Wand2", desc: "Remove background from image without uploading. No uploads, runs in your browser." },
+      { name: "AI Image Upscaler", href: "/image/upscaler", icon: "Wand2-blue", desc: "Enhance image resolution without uploading. Upscale to 4K, make HD with AI." },
+      { name: "AI OCR Image to Text", href: "/ai/ocr", icon: "Sparkles", desc: "Extract text from image without uploading. Private, runs in your browser." },
     ]
   },
   {
@@ -57,8 +57,8 @@ const defaultTools = [
       { name: "Watermark Adder", href: "/image/watermark", icon: "Sparkles", desc: "Add custom text watermarks to lock your copyright safely." },
       { name: "Text on Image", href: "/image/text-on-image", icon: "Sliders", desc: "Write custom typography captions, offsets, and outlines." },
       { name: "Meme Generator", href: "/image/meme", icon: "Sliders-purple", desc: "Create classic internet memes using standard impact text." },
-      { name: "Passport Photo Maker", href: "/image/passport", icon: "ImageIcon", desc: "Formulate portraits to exact US, EU, and UK passport sheets." },
-      { name: "ID Photo Maker", href: "/image/id-photo", icon: "ImageIcon", desc: "Format official badges, corporate passes, and student IDs." },
+      { name: "Passport Photo Maker Online", href: "/image/passport", icon: "ImageIcon", desc: "Create passport photo without uploading. Private, runs in your browser." },
+      { name: "ID Photo Maker Online", href: "/image/id-photo", icon: "ImageIcon", desc: "Create ID photo without uploading. Private, runs in your browser." },
       { name: "Collage Maker", href: "/image/collage", icon: "Sliders", desc: "Combine multiple pictures into grid collage sheets." },
       { name: "Image Splitter", href: "/image/splitter", icon: "Crop-teal", desc: "Slice photos into grid arrays for social media posts." },
       { name: "Aspect Ratio Converter", href: "/image/aspect-ratio", icon: "Crop-teal", desc: "Fit images into 16:9, 1:1, or 9:16 cover/contain frames." },
@@ -70,9 +70,9 @@ const defaultTools = [
     title: "YouTube Tools",
     description: "Extract metadata and thumbnails.",
     items: [
-      { name: "Thumbnail Downloader", href: "/youtube/thumbnail", icon: "Youtube", desc: "Download YouTube thumbnails in all available quality." },
-      { name: "Video ID Finder", href: "/youtube/embed", icon: "Code", desc: "Extract YouTube Video ID from any URL instantly." },
-      { name: "Channel ID Finder", href: "/youtube/channel", icon: "Video", desc: "Extract the unique 24-character YouTube Channel ID instantly." },
+      { name: "YouTube Thumbnail Downloader", href: "/youtube/thumbnail", icon: "Youtube", desc: "Download YouTube thumbnail in HD, 4K, and full resolution. No signup." },
+      { name: "YouTube Video ID Finder", href: "/youtube/embed", icon: "Code", desc: "Find YouTube video ID from any URL, Shorts, or youtu.be link." },
+      { name: "YouTube Channel ID Finder", href: "/youtube/channel", icon: "Video", desc: "Find YouTube channel ID from any URL, handle, or video link." },
     ]
   },
   {
@@ -526,7 +526,7 @@ function DashboardInterior() {
         <div className="flex-1 space-y-6 z-10 text-center lg:text-left max-w-xl">
           <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3">
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#121124] border border-[#232145] text-xs font-bold text-white tracking-wide">
-              <span className="text-yellow-400">⚡</span> 100% Browser-based
+              <span className="text-yellow-400">🔒</span> 100% Local & Private
             </div>
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-gradient-to-r from-purple-500/10 to-indigo-500/10 border border-purple-500/20 text-xs font-bold text-purple-300">
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -537,15 +537,15 @@ function DashboardInterior() {
 
           <div className="space-y-3">
             <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-white leading-tight">
-              All-in-One <br className="hidden md:inline" />
+              Private <br className="hidden md:inline" />
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-[#a855f7] to-blue-400 animate-pulse-glow">
                 AI Tools
               </span>{" "}
-              Platform
+              That Run Locally
             </h1>
             <p className="text-sm md:text-base text-[#8e8ca3] leading-relaxed font-medium">
-              Powerful tools to edit, convert, optimize and create. <br />
-              All in your browser. Fast, secure and private.
+              No uploads. No servers. No privacy risk. <br />
+              All tools run 100% in your browser.
             </p>
           </div>
 

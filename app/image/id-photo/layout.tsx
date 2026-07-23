@@ -1,12 +1,19 @@
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'ID Photo Maker | Free Passport Photo Creator | Cybro Tools',
-  description: 'Create professional ID photos for school, work, or official use. Ensure perfect sizing and alignment online.',
-  keywords: 'id-photo, image tool, free online tool, cybro tools',
+  title: 'ID Photo Maker Online - Create ID Photo Without Uploading | Cybro Tools',
+  description: 'Free ID photo maker online. Create ID photo without uploading to servers. No uploads, no watermark. ID photo background remover included.',
+  keywords: [
+    'ID photo maker online',
+    'create ID photo online',
+    'ID photo maker no upload',
+    'private ID photo maker',
+    'ID photo background remover',
+    'biometric photo maker',
+  ],
   openGraph: {
-    title: 'ID Photo Maker | Free Passport Photo Creator | Cybro Tools',
-    description: 'Create professional ID photos for school, work, or official use. Ensure perfect sizing and alignment online.',
+    title: 'ID Photo Maker Online - Create ID Photo Without Uploading',
+    description: 'Free ID photo maker. Create ID photo without uploading. No uploads, no watermark.',
     type: 'website',
   }
 };

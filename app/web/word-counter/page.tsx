@@ -3,6 +3,7 @@
 import { useState, useMemo } from "react";
 import { Copy, Trash2, Check } from "lucide-react";
 import { ToolSeoSection } from "@/components/ToolSeoSection";
+import { BannerAd } from "@/components/BannerAd";
 
 export default function WordCounter() {
   const [text, setText] = useState("");
@@ -36,6 +37,7 @@ export default function WordCounter() {
 
   return (
     <div className="p-6 md:p-10 max-w-5xl mx-auto space-y-8 h-full flex flex-col">
+      <BannerAd />
       <div>
         <h1 className="text-2xl font-bold tracking-tight mb-2">Word & Character Counter</h1>
         <p className="text-gray-500 dark:text-zinc-400">Instantly count words, characters, sentences, and paragraphs.</p>

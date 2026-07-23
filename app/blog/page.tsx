@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { BookOpen, Calendar, User, ArrowRight, Sparkles, Sliders, Youtube, ShieldAlert, Tag, Clock, Compass } from "lucide-react";
+import { BookOpen, Calendar, User, ArrowRight, Sparkles, Sliders, Youtube, ShieldAlert, Tag, Clock, Compass, Share2 } from "lucide-react";
 import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 
@@ -185,6 +185,58 @@ export default function Blog() {
             >
               {selectedPost.content}
             </ReactMarkdown>
+          </div>
+
+          {/* Share Buttons */}
+          <div className="flex flex-wrap gap-3 mt-8 pb-6 border-b border-zinc-800">
+            <span className="text-xs font-semibold text-zinc-400 flex items-center mr-2">Share:</span>
+            <button
+              onClick={async () => {
+                const url = window.location.href;
+                const title = selectedPost.title;
+                if (navigator.share) {
+                  try {
+                    await navigator.share({ title, url });
+                  } catch (err) {
+                    if (err.name !== 'AbortError') {
+                      await navigator.clipboard.writeText(url);
+                    }
+                  }
+                } else {
+                  await navigator.clipboard.writeText(url);
+                }
+              }}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-zinc-300 bg-zinc-800 hover:bg-zinc-700 rounded-lg transition-colors"
+            >
+              <Share2 className="w-3.5 h-3.5" /> Share
+            </button>
+            <a
+              href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(selectedPost.title)}&url=${encodeURIComponent(window.location.href)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-zinc-300 bg-zinc-800 hover:bg-zinc-700 rounded-lg transition-colors"
+            >
+              <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/></svg>
+              X
+            </a>
+            <a
+              href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.href)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-zinc-300 bg-zinc-800 hover:bg-zinc-700 rounded-lg transition-colors"
+            >
+              <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+              LinkedIn
+            </a>
+            <button
+              onClick={async () => {
+                await navigator.clipboard.writeText(window.location.href);
+              }}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-zinc-300 bg-zinc-800 hover:bg-zinc-700 rounded-lg transition-colors"
+            >
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
+              Copy Link
+            </button>
           </div>
 
           <div className="bg-gradient-to-r from-purple-500/5 to-blue-500/5 p-6 rounded-3xl border border-purple-500/10 mt-8 space-y-3">

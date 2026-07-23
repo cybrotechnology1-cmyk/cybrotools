@@ -19,6 +19,7 @@ import {
 import { BeforeAfterSlider } from "@/components/BeforeAfterSlider";
 import { addHistoryLog } from "@/app/lib/history";
 import { ToolSeoSection } from "@/components/ToolSeoSection";
+import { BannerAd } from "@/components/BannerAd";
 
 type UIState = "idle" | "loading_model" | "processing" | "success" | "error";
 
@@ -58,15 +59,16 @@ export default function Home() {
       if (type === "progress") {
         if (data.status === "init") {
           setUiState("loading_model");
-          setProgressText("Initializing AI model...");
+          setProgressText("Initializing cybrotools engine...");
         } else if (data.status === "downloading" || data.status === "progress") {
           setUiState("loading_model");
-          setProgressText(`Downloading model... ${data.name || ""}`);
+          const fileInfo = data.file || data.name || "";
+          setProgressText(`Loading cybrotools engine... ${fileInfo}`);
           if (typeof data.progress === "number") {
             setProgress(data.progress > 1 ? data.progress : data.progress * 100);
           }
         } else if (data.status === "ready") {
-          setProgressText("Model loaded.");
+          setProgressText("Engine ready.");
         }
       } else if (type === "ready") {
         setUiState("idle");
@@ -360,9 +362,10 @@ export default function Home() {
 
   const downloadResult = () => {
     if (resultImage) {
+      const filename = bgMode === "transparent" ? "background-removed_edited_by_cybrotools.png" : "background-replaced_edited_by_cybrotools.png";
       const a = document.createElement("a");
       a.href = resultImage;
-      a.download = bgMode === "transparent" ? "background-removed.png" : "background-replaced.png";
+      a.download = filename;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
@@ -371,6 +374,7 @@ export default function Home() {
 
   return (
     <div className="flex flex-col relative overflow-hidden h-full p-4 md:p-8">
+      <BannerAd />
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col items-center justify-center w-full">
         

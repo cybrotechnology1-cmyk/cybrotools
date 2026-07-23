@@ -5,6 +5,7 @@ import QRCode from "qrcode";
 import JsBarcode from "jsbarcode";
 import { Copy, Download, QrCode, Barcode, Check } from "lucide-react";
 import { ToolSeoSection } from "@/components/ToolSeoSection";
+import { BannerAd } from "@/components/BannerAd";
 
 export default function Generators() {
   const [activeTab, setActiveTab] = useState<"qr" | "barcode">("qr");
@@ -64,7 +65,7 @@ export default function Generators() {
     const url = canvas.toDataURL("image/png");
     const a = document.createElement("a");
     a.href = url;
-    a.download = `barcode-${barcodeText}.png`;
+    a.download = `barcode-${barcodeText}_edited_by_cybrotools.png`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -72,6 +73,7 @@ export default function Generators() {
 
   return (
     <div className="p-6 md:p-10 max-w-4xl mx-auto space-y-8">
+      <BannerAd />
       <div>
         <h1 className="text-2xl font-bold tracking-tight mb-2">QR & Barcode Generator</h1>
         <p className="text-gray-500 dark:text-zinc-400">Generate high-quality, customizable QR codes and Barcodes on the fly.</p>
@@ -182,7 +184,7 @@ export default function Generators() {
                   </div>
                   <a
                     href={qrUrl}
-                    download="qrcode.png"
+                    download="qrcode_edited_by_cybrotools.png"
                     className="px-6 py-2.5 bg-gray-900 dark:bg-white text-white dark:text-zinc-900 font-medium rounded-xl flex items-center gap-2 hover:bg-gray-800 dark:hover:bg-gray-100 transition-all text-sm"
                   >
                     <Download className="w-4 h-4" /> Download QR Code

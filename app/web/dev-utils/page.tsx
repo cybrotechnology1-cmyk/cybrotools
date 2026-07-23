@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Copy, Check, Terminal, Play, Lock, Hash, Code, Sparkles } from "lucide-react";
 import { ToolSeoSection } from "@/components/ToolSeoSection";
+import { BannerAd } from "@/components/BannerAd";
 
 export default function DevUtils() {
   const [activeTab, setActiveTab] = useState<"uuid" | "hash" | "base64" | "url" | "json" | "html-format" | "css-minify" | "js-beautify">("uuid");
@@ -234,6 +235,7 @@ export default function DevUtils() {
 
   return (
     <div className="p-6 md:p-10 max-w-5xl mx-auto space-y-8">
+      <BannerAd />
       <div>
         <h1 className="text-2xl font-bold tracking-tight mb-2">Developer Utilities</h1>
         <p className="text-gray-500 dark:text-zinc-400">Essential utilities for developers, formatted and run 100% locally in-browser.</p>

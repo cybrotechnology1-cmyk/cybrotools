@@ -18,12 +18,10 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "No image provided" }, { status: 400 });
     }
 
-    // Validate image input size (max 10MB base64 string ~ 13.3MB encoded)
     if (image.length > 15 * 1024 * 1024) {
       return NextResponse.json({ error: "Image too large. Maximum size is 10MB." }, { status: 400 });
     }
 
-    // Parse base64 image data
     const matches = image.match(/^data:(image\/[a-z\-+.]+);base64,(.+)$/);
     if (!matches) {
       return NextResponse.json({ error: "Invalid image format" }, { status: 400 });
@@ -32,7 +30,6 @@ export async function POST(req: NextRequest) {
     const mimeType = matches[1];
     const base64Data = matches[2];
 
-    // Validate mime type is an image
     const allowedMimeTypes = ["image/jpeg", "image/png", "image/webp", "image/gif", "image/bmp", "image/tiff"];
     if (!allowedMimeTypes.includes(mimeType)) {
       return NextResponse.json({ error: "Unsupported image type. Use JPEG, PNG, WebP, GIF, BMP, or TIFF." }, { status: 400 });
@@ -55,7 +52,7 @@ export async function POST(req: NextRequest) {
     };
 
     const response = await ai.models.generateContent({
-      model: "gemini-3.5-flash",
+      model: "gemini-2.0-flash",
       contents: [imagePart, prompt],
     });
 

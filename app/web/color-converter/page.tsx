@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { Copy, RefreshCw, Palette, Shuffle, AlertCircle, Sparkles, CheckCircle2, ShieldAlert } from "lucide-react";
 import { addHistoryLog } from "@/app/lib/history";
 import { ToolSeoSection } from "@/components/ToolSeoSection";
+import { BannerAd } from "@/components/BannerAd";
 
 // --- MATH CONVERSIONS ---
 function hexToRgb(hex: string) {
@@ -298,6 +299,7 @@ export default function ColorConverter() {
 
   return (
     <div className="p-6 md:p-10 max-w-5xl mx-auto space-y-8 animate-in fade-in duration-500">
+      <BannerAd />
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold tracking-tight mb-2 flex items-center gap-2">

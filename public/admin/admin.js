@@ -21,6 +21,19 @@ if (!token && !isLoginPage) {
   });
 }
 
+// PWA support for admin pages
+(function() {
+  if (!document.querySelector('link[rel="manifest"]')) {
+    const link = document.createElement("link");
+    link.rel = "manifest";
+    link.href = "/manifest.json";
+    document.head.appendChild(link);
+  }
+  if ("serviceWorker" in navigator && !window.location.pathname.includes("login.html")) {
+    navigator.serviceWorker.register("/sw.js", { scope: "/" });
+  }
+})();
+
 // Secure API request helper
 export async function adminFetch(url, options = {}) {
   const token = localStorage.getItem("cybro_admin_token");

@@ -13,12 +13,14 @@ export const metadata: Metadata = {
   title: 'Cybro Tools | Fast & Private Browser Tools',
   description: 'Production-grade tools running entirely in your browser. Secure, fast, and private.',
   keywords: 'browser tools, AI, privacy, background removal, youtube thumbnail, password generator',
+  manifest: '/manifest.json',
   icons: {
     icon: '/logo.jpg',
   },
   other: {
     'google-site-verification': 'ow3p7-sAgz1nmc4oLvtLKoM1B97TfQjJBdiicaxrXyg',
     'monetag': 'ba839a44023faec4820c9e220a9bf067',
+    'theme-color': '#3b82f6',
   },
 };
 
@@ -43,6 +45,11 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
             </div>
           </div>
         </AuthProvider>
+        <Script id="register-sw" strategy="lazyOnload">{`
+          if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js', { scope: '/' });
+          }
+        `}</Script>
       </body>
     </html>
   );

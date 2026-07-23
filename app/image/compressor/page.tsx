@@ -6,6 +6,7 @@ import { useDropzone } from "react-dropzone";
 import Image from "next/image";
 import imageCompression from "browser-image-compression";
 import { ToolSeoSection } from "@/components/ToolSeoSection";
+import { BannerAd } from "@/components/BannerAd";
 
 export default function ImageCompressor() {
   const [originalFile, setOriginalFile] = useState<File | null>(null);
@@ -79,6 +80,7 @@ export default function ImageCompressor() {
 
   return (
     <div className="p-6 md:p-10 max-w-5xl mx-auto space-y-8">
+      <BannerAd />
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold tracking-tight mb-2">Image Compressor</h1>
@@ -207,7 +209,7 @@ export default function ImageCompressor() {
                       <div className="absolute inset-0 bg-black/50 opacity-0 hover:opacity-100 transition-opacity flex items-center justify-center">
                         <a 
                           href={compressedUrl}
-                          download={`compressed_${originalFile.name}`}
+                          download={`compressed_${originalFile.name}_edited_by_cybrotools`}
                           className="px-6 py-3 bg-white text-gray-900 rounded-full font-medium flex items-center gap-2 shadow-lg hover:scale-105 active:scale-95 transition-all"
                         >
                           <Download className="w-5 h-5" />

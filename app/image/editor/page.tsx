@@ -5,6 +5,7 @@ import { UploadCloud, Image as ImageIcon, Download, RotateCw, FlipHorizontal, Fl
 import { useDropzone } from "react-dropzone";
 import Image from "next/image";
 import { ToolSeoSection } from "@/components/ToolSeoSection";
+import { BannerAd } from "@/components/BannerAd";
 
 export default function ImageEditor() {
   const [originalFile, setOriginalFile] = useState<File | null>(null);
@@ -283,6 +284,7 @@ export default function ImageEditor() {
 
   return (
     <div className="p-6 md:p-10 max-w-5xl mx-auto space-y-8">
+      <BannerAd />
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold tracking-tight mb-2">Image Editor</h1>
@@ -462,9 +464,9 @@ export default function ImageEditor() {
                   {editedUrl ? (
                     <>
                       <Image src={editedUrl} alt="Edited" fill className="object-contain" unoptimized />
-                      <div className="absolute inset-0 bg-black/50 opacity-0 hover:opacity-100 transition-opacity flex items-center justify-center">
-                        <a href={editedUrl} download={`edited_${originalFile?.name}`} className="px-6 py-3 bg-white text-gray-900 rounded-full font-medium flex items-center gap-2 shadow-lg hover:scale-105 active:scale-95 transition-all">
-                          <Download className="w-5 h-5" /> Download Image
+                      <div className="absolute bottom-3 left-3 right-3 z-10">
+                        <a href={editedUrl} download={`edited_${originalFile?.name}_edited_by_cybrotools`} className="w-full px-4 py-2.5 bg-white dark:bg-zinc-800 text-gray-900 dark:text-white rounded-xl font-medium flex items-center justify-center gap-2 shadow-lg hover:scale-[1.02] active:scale-95 transition-all text-sm">
+                          <Download className="w-4 h-4" /> Download Image
                         </a>
                       </div>
                     </>

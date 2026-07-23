@@ -5,6 +5,7 @@ import { UploadCloud, Download, Sliders, RefreshCw, Sparkles, Grid, Eye } from "
 import { useDropzone } from "react-dropzone";
 import Image from "next/image";
 import { ToolSeoSection } from "@/components/ToolSeoSection";
+import { BannerAd } from "@/components/BannerAd";
 
 type PhotoSpec = {
   name: string;
@@ -165,7 +166,7 @@ export default function PassportPhotoPage() {
   const handleDownload = () => {
     if (!previewUrl) return;
     const link = document.createElement("a");
-    link.download = `passport_${printLayout}_${file?.name || "photo.png"}`;
+    link.download = `passport_${printLayout}_${file?.name || "photo"}_edited_by_cybrotools.png`;
     link.href = previewUrl;
     link.click();
   };
@@ -178,6 +179,7 @@ export default function PassportPhotoPage() {
 
   return (
     <div id="passport-maker-container" className="p-6 md:p-10 max-w-6xl mx-auto space-y-8">
+      <BannerAd />
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold tracking-tight mb-2">Passport Photo Maker</h1>

@@ -1,9 +1,5 @@
 import { AutoModel, AutoProcessor, RawImage, env } from '@huggingface/transformers';
 
-// We do not need the cache on the browser if it's strictly local or we can let the browser cache it
-// env.allowLocalModels = false;
-
-// cybro2.50 (Classic cybro AI) as the default background remover
 const DEFAULT_MODEL = 'briaai/RMBG-1.4';
 
 class BackgroundRemoverPipeline {
@@ -21,7 +17,7 @@ class BackgroundRemoverPipeline {
     let lastError = null;
 
     try {
-      progress_callback({ status: 'init', name: modelId });
+      progress_callback({ status: 'init', name: 'cybrotools-engine' });
       
       const options: any = { progress_callback };
       if (modelId.includes('RMBG-1.4')) {
@@ -52,11 +48,11 @@ class BackgroundRemoverPipeline {
       this.processor = await AutoProcessor.from_pretrained(modelId, processorOptions);
       this.currentModelId = modelId;
     } catch (err) {
-      console.error(`Failed to load ${modelId}:`, err);
+      console.error(`Failed to load model:`, err);
       lastError = err;
       this.model = null;
       this.processor = null;
-      throw new Error(`Failed to load background removal model ${modelId}. Error: ${lastError}`);
+      throw new Error(`Failed to load AI engine. Please try again.`);
     }
 
     this.isInitializing = false;
@@ -70,14 +66,17 @@ self.addEventListener('message', async (e: MessageEvent) => {
   const sanitizeProgress = (info: any) => {
     const sanitizedInfo = { ...info };
     if (sanitizedInfo.name && typeof sanitizedInfo.name === 'string') {
-      sanitizedInfo.name = sanitizedInfo.name
-        .replace(/briaai\/RMBG-1.4/gi, "cybro2.50 (Classic cybro AI)")
-        .replace(/RMBG-1.4/gi, "cybro2.50 (Classic cybro AI)");
+      sanitizedInfo.name = 'cybrotools-ai-engine';
     }
     if (sanitizedInfo.file && typeof sanitizedInfo.file === 'string') {
-      sanitizedInfo.file = sanitizedInfo.file
-        .replace(/briaai\/RMBG-1.4/gi, "cybro2.50 (Classic cybro AI)")
-        .replace(/RMBG-1.4/gi, "cybro2.50 (Classic cybro AI)");
+      const ext = sanitizedInfo.file.split('.').pop() || 'bin';
+      sanitizedInfo.file = `cybrotools-engine.${ext}`;
+    }
+    if (typeof sanitizedInfo.progress === 'number' && sanitizedInfo.progress > 0) {
+      const realProgress = sanitizedInfo.progress > 1 ? sanitizedInfo.progress : sanitizedInfo.progress * 100;
+      const fakeSize = 250;
+      const fakeLoaded = Math.round((realProgress / 100) * fakeSize);
+      sanitizedInfo.file = `cybrotools-engine.bin (${fakeLoaded}MB / ${fakeSize}MB)`;
     }
     return sanitizedInfo;
   };
@@ -99,36 +98,21 @@ self.addEventListener('message', async (e: MessageEvent) => {
         self.postMessage({ type: 'progress', data: sanitizeProgress(info) });
       });
 
-      // Load image
       const image = await RawImage.fromURL(imageURL);
-      
-      // Process inputs
       const { pixel_values } = await processor(image);
-
-      // Predict
       const { output } = await model({ input: pixel_values });
-
-      // The output is a mask. We need to resize it back to original image size and apply it.
       const mask = await RawImage.fromTensor(output[0].mul(255).to('uint8')).resize(image.width, image.height);
 
-      // Draw original image
       const resultData = new Uint8ClampedArray(image.width * image.height * 4);
-      
-      // The original image might be RGB (3 channels) or RGBA (4 channels)
-      // Transformers.js RawImage `image.data` contains channels depending on image format.
-      // Usually after RawImage.fromURL, it converts to RGBA if we specify it or RGB. 
-      // Let's ensure we get RGBA from RawImage
       const rgbaImage = image.rgba();
       
       for (let i = 0; i < mask.data.length; i++) {
-        resultData[i * 4] = rgbaImage.data[i * 4];       // R
-        resultData[i * 4 + 1] = rgbaImage.data[i * 4 + 1]; // G
-        resultData[i * 4 + 2] = rgbaImage.data[i * 4 + 2]; // B
-        resultData[i * 4 + 3] = mask.data[i];            // A (Use mask as alpha)
+        resultData[i * 4] = rgbaImage.data[i * 4];
+        resultData[i * 4 + 1] = rgbaImage.data[i * 4 + 1];
+        resultData[i * 4 + 2] = rgbaImage.data[i * 4 + 2];
+        resultData[i * 4 + 3] = mask.data[i];
       }
 
-      // Convert result to blob using a new RawImage or return raw data to main thread
-      // We can send the raw image data back to the main thread where it's easier to create a blob using a canvas
       (self as any).postMessage({ 
         type: 'complete', 
         id, 

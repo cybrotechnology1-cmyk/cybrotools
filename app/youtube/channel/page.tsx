@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Search, Copy, Check, Youtube, Info, AlertCircle, RefreshCw } from "lucide-react";
 import { ToolSeoSection } from "@/components/ToolSeoSection";
+import { BannerAd } from "@/components/BannerAd";
 
 export default function ChannelIdFinder() {
   const [url, setUrl] = useState("");
@@ -54,6 +55,7 @@ export default function ChannelIdFinder() {
 
   return (
     <div className="p-6 md:p-10 max-w-4xl mx-auto space-y-8">
+      <BannerAd />
       <div>
         <h1 className="text-2xl font-bold tracking-tight mb-2 flex items-center gap-2">
           <Youtube className="w-7 h-7 text-red-500" /> YouTube Channel ID Finder
