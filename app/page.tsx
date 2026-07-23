@@ -645,8 +645,8 @@ function DashboardInterior() {
             <Users className="w-5 h-5" />
           </div>
           <div>
-            <div className="text-base font-bold text-white leading-tight">500K+</div>
-            <div className="text-[11px] text-[#8e8ca3] font-medium uppercase tracking-wider">Happy Users</div>
+            <div className="text-base font-bold text-white leading-tight">100%</div>
+            <div className="text-[11px] text-[#8e8ca3] font-medium uppercase tracking-wider">Client-Side Processing</div>
           </div>
         </div>
       </div>

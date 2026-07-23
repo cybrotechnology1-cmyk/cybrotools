@@ -1,9 +1,9 @@
-import { Metadata } from 'next';
+﻿import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Free Image Compressor | Reduce Image Size Online | Cybro Tools',
   description: 'Compress JPG, PNG, WEBP images without losing quality. 100% free, fast, and secure client-side browser compression.',
-  keywords: 'compressor, image tool, free online tool, cybro tools',
+  keywords: 'image compressor, compress jpg, reduce image size, compress png, image optimizer, online compressor',
   openGraph: {
     title: 'Free Image Compressor | Reduce Image Size Online | Cybro Tools',
     description: 'Compress JPG, PNG, WEBP images without losing quality. 100% free, fast, and secure client-side browser compression.',

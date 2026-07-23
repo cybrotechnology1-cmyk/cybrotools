@@ -1,9 +1,9 @@
-import { Metadata } from 'next';
+﻿import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Free Image Converter | Change Image Format | Cybro Tools',
   description: 'Convert images between JPG, PNG, WEBP, and more formats instantly in your browser. Fast, free, and private.',
-  keywords: 'converter, image tool, free online tool, cybro tools',
+  keywords: 'image converter, convert jpg to png, convert webp, image format converter, online converter, free image tool',
   openGraph: {
     title: 'Free Image Converter | Change Image Format | Cybro Tools',
     description: 'Convert images between JPG, PNG, WEBP, and more formats instantly in your browser. Fast, free, and private.',

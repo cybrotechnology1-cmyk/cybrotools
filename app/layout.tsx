@@ -10,17 +10,54 @@ import PrivacyBanner from '@/components/PrivacyBanner';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
 
+const baseUrl = 'https://cybrotools.xyz';
+
 export const metadata: Metadata = {
-  title: 'Cybro Tools | Fast & Private Browser Tools',
-  description: 'Production-grade tools running entirely in your browser. Secure, fast, and private.',
-  keywords: 'browser tools, AI, privacy, background removal, youtube thumbnail, password generator',
+  title: {
+    default: 'Cybro Tools | Free Online Image, AI & Web Tools',
+    template: '%s | Cybro Tools',
+  },
+  description: 'Free online tools for image editing, AI background removal, YouTube thumbnail download, password generator, and more. Fast, secure, and private browser-based tools.',
+  keywords: 'online tools, image editor, background remover, AI tools, YouTube thumbnail downloader, password generator, free web tools, image compressor',
   manifest: '/manifest.json',
   icons: {
     icon: '/logo.jpg',
   },
+  metadataBase: new URL(baseUrl),
+  alternates: {
+    canonical: '/',
+  },
+  openGraph: {
+    title: 'Cybro Tools | Free Online Image, AI & Web Tools',
+    description: 'Free online tools for image editing, AI background removal, YouTube thumbnail download, password generator, and more. Fast, secure, and private browser-based tools.',
+    url: baseUrl,
+    siteName: 'Cybro Tools',
+    images: [
+      {
+        url: '/logo.jpg',
+        width: 512,
+        height: 512,
+        alt: 'Cybro Tools',
+      },
+    ],
+    locale: 'en_US',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Cybro Tools | Free Online Image, AI & Web Tools',
+    description: 'Free online tools for image editing, AI background removal, YouTube thumbnail download, password generator, and more.',
+    images: ['/logo.jpg'],
+    creator: '@cybrotools',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    'max-snippet': -1,
+    'max-image-preview': 'large',
+  },
   other: {
     'google-site-verification': 'ow3p7-sAgz1nmc4oLvtLKoM1B97TfQjJBdiicaxrXyg',
-    'monetag': 'ba839a44023faec4820c9e220a9bf067',
     'theme-color': '#3b82f6',
   },
 };
@@ -28,9 +65,47 @@ export const metadata: Metadata = {
 export default function RootLayout({children}: {children: React.ReactNode}) {
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
+      <head>
+        <link rel="canonical" href={baseUrl} />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'WebSite',
+              name: 'Cybro Tools',
+              url: baseUrl,
+              potentialAction: {
+                '@type': 'SearchAction',
+                target: {
+                  '@type': 'EntryPoint',
+                  urlTemplate: `${baseUrl}/search?q={search_term_string}`,
+                },
+                'query-input': 'required name=search_term_string',
+              },
+            }),
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'Organization',
+              name: 'Cybro Tools',
+              url: baseUrl,
+              logo: `${baseUrl}/logo.jpg`,
+              contactPoint: {
+                '@type': 'ContactPoint',
+                email: 'support@cybrotools.xyz',
+                contactType: 'customer support',
+              },
+            }),
+          }}
+        />
+      </head>
       <body className={`${inter.variable} font-sans antialiased bg-[#04030a] text-gray-100 min-h-screen flex flex-col`} suppressHydrationWarning>
         <Script id="monetag-push" src="https://5gvci.com/act/files/tag.min.js?z=11366986" strategy="beforeInteractive" />
-        <Script id="monetag-vignette" strategy="afterInteractive">{`(function(s){s.dataset.zone='11367117',s.src='https://n6wxm.com/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))`}</Script>
         <AuthProvider>
           <div className="flex min-h-screen">
             <AppSidebar />

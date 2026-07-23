@@ -940,6 +940,25 @@ export function ToolSeoSection({ toolId }: ToolSeoSectionProps) {
           })
         }}
       />
+      {meta.faqs && meta.faqs.length > 0 && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "FAQPage",
+              "mainEntity": meta.faqs.map(faq => ({
+                "@type": "Question",
+                "name": faq.question,
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": faq.answer
+                }
+              }))
+            })
+          }}
+        />
+      )}
       
       {/* 1. Header Overview for SEO crawlers & users */}
       <div className="space-y-4 text-center max-w-2xl mx-auto">

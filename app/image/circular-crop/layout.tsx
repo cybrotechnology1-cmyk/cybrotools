@@ -1,9 +1,9 @@
-import { Metadata } from 'next';
+﻿import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Circular Image Crop | Round Profile Picture Maker | Cybro Tools',
   description: 'Crop your images into perfect circles online for free. Ideal for profile pictures, avatars, and logos.',
-  keywords: 'circular-crop, image tool, free online tool, cybro tools',
+  keywords: 'circular crop, round crop image, circle photo, circular image maker, profile picture maker, online crop tool',
   openGraph: {
     title: 'Circular Image Crop | Round Profile Picture Maker | Cybro Tools',
     description: 'Crop your images into perfect circles online for free. Ideal for profile pictures, avatars, and logos.',

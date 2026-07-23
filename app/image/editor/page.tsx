@@ -288,7 +288,7 @@ export default function ImageEditor() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold tracking-tight mb-2">Image Editor</h1>
-          <p className="text-gray-500 dark:text-zinc-400">Crop, resize, rotate, flip, and style your images client-side.</p>
+          <p className="text-gray-500 dark:text-zinc-400">Crop, resize, rotate, flip, add filters, adjust brightness and contrast, draw, add text, shapes, and more. All processing happens client-side.</p>
         </div>
         {originalFile && (
           <button onClick={reset} className="px-4 py-2 border border-gray-300 dark:border-zinc-700 rounded-lg font-medium hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors text-sm">
