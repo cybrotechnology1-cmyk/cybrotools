@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useState, useEffect, useMemo, Suspense } from "react";
 import Link from "next/link";
@@ -530,7 +530,7 @@ function DashboardInterior() {
             </div>
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-gradient-to-r from-purple-500/10 to-indigo-500/10 border border-purple-500/20 text-xs font-bold text-purple-300">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-<img src="/logo.jpg" alt="Cybro Brand Icon" className="w-4 h-4 rounded-md object-cover" referrerPolicy="no-referrer" />
+<img src="/logo.png" alt="Cybro Brand Icon" className="w-4 h-4 rounded-md object-cover" referrerPolicy="no-referrer" />
               <span>Cybro Brand Active</span>
             </div>
           </div>

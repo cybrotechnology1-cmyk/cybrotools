@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -111,7 +111,7 @@ export function AppSidebar() {
             <div className="w-9 h-9 rounded-xl overflow-hidden border border-purple-500/20 group-hover:border-purple-400/50 flex items-center justify-center shadow-lg shadow-purple-500/10 group-hover:scale-105 transition-all duration-300 bg-[#0c0a21]">
               {/* eslint-disable-next-line @next/next/no-img-element */}
 <img
-                src="/logo.jpg"
+                src="/logo.png"
                 alt="Cybro Tools Logo"
                 className="w-full h-full object-cover"
                 referrerPolicy="no-referrer"

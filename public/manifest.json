@@ -1,4 +1,4 @@
-{
+﻿{
   "name": "Cybro Tools",
   "short_name": "CybroTools",
   "description": "Production-grade AI & browser tools running entirely in your browser. Secure, fast, and private.",
@@ -16,13 +16,13 @@
       "purpose": "any maskable"
     },
     {
-      "src": "/logo.jpg",
+      "src": "/logo.png",
       "sizes": "192x192",
       "type": "image/jpeg",
       "purpose": "any"
     },
     {
-      "src": "/logo.jpg",
+      "src": "/logo.png",
       "sizes": "512x512",
       "type": "image/jpeg",
       "purpose": "any"

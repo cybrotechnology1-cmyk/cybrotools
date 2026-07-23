@@ -1,4 +1,4 @@
-import type {Metadata} from 'next';
+﻿import type {Metadata} from 'next';
 import Script from 'next/script';
 import { Inter } from 'next/font/google';
 import './globals.css';
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   keywords: 'online tools, image editor, background remover, AI tools, YouTube thumbnail downloader, password generator, free web tools, image compressor',
   manifest: '/manifest.json',
   icons: {
-    icon: '/logo.jpg',
+    icon: '/logo.png',
   },
   metadataBase: new URL(baseUrl),
   alternates: {
@@ -34,7 +34,7 @@ export const metadata: Metadata = {
     siteName: 'Cybro Tools',
     images: [
       {
-        url: '/logo.jpg',
+        url: '/logo.png',
         width: 512,
         height: 512,
         alt: 'Cybro Tools',
@@ -47,7 +47,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Cybro Tools | Free Online Image, AI & Web Tools',
     description: 'Free online tools for image editing, AI background removal, YouTube thumbnail download, password generator, and more.',
-    images: ['/logo.jpg'],
+    images: ['/logo.png'],
     creator: '@cybrotools',
   },
   robots: {
@@ -94,7 +94,7 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
               '@type': 'Organization',
               name: 'Cybro Tools',
               url: baseUrl,
-              logo: `${baseUrl}/logo.jpg`,
+              logo: `${baseUrl}/logo.png`,
               contactPoint: {
                 '@type': 'ContactPoint',
                 email: 'support@cybrotools.xyz',
