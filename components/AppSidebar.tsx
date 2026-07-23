@@ -108,7 +108,7 @@ export function AppSidebar() {
         {/* Top Branding Section */}
         <div className="p-6 pb-2">
           <Link href="/" className="flex items-center gap-3 group" onClick={() => setIsOpen(false)}>
-            <div className="w-9 h-9 rounded-xl overflow-hidden border border-purple-500/20 group-hover:border-purple-400/50 flex items-center justify-center shadow-lg shadow-purple-500/10 group-hover:scale-105 transition-all duration-300 bg-[#0c0a21]">
+            <div className="w-12 h-12 rounded-xl overflow-hidden border border-purple-500/20 group-hover:border-purple-400/50 flex items-center justify-center shadow-lg shadow-purple-500/10 group-hover:scale-105 transition-all duration-300 bg-[#0c0a21]">
               {/* eslint-disable-next-line @next/next/no-img-element */}
 <img
                 src="/logo.png"
