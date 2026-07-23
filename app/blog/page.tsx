@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { BookOpen, Calendar, User, ArrowRight, Sparkles, Sliders, Youtube, ShieldAlert, Tag, Clock, Compass, Share2 } from "lucide-react";
 import Link from "next/link";
 import ReactMarkdown from "react-markdown";
+import NativeBanner from "@/components/NativeBanner";
 
 const blogPosts = [
   {
@@ -113,6 +114,9 @@ export default function Blog() {
           Insights, deep-dives, and guides on how we build fast, secure browser-only tools.
         </p>
       </div>
+
+      {/* Native Ad - Blog Header High Impression Spot */}
+      <NativeBanner />
 
       {loading ? (
         <div className="text-center py-20 text-gray-400 animate-pulse text-sm">
@@ -318,6 +322,9 @@ export default function Blog() {
           )}
         </div>
       )}
+
+      {/* Native Ad - Blog Bottom High Impression Spot */}
+      <NativeBanner />
     </div>
   );
 }

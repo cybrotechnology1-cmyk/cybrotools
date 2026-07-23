@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useMemo, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import NativeBanner from "@/components/NativeBanner";
 import { 
   Wand2, 
   Image as ImageIcon, 
@@ -651,6 +652,9 @@ function DashboardInterior() {
         </div>
       </div>
 
+      {/* Native Ad - High Impression Spot */}
+      <NativeBanner />
+
       {/* Daily Check-In & Creator Streak Engagement Panel */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-gradient-to-br from-[#0c0a25] to-[#04030d] border border-[#1f1a4e] rounded-3xl p-6 shadow-2xl relative overflow-hidden">
         {/* Subtle accent light */}
@@ -872,6 +876,9 @@ function DashboardInterior() {
           })}
         </div>
       )}
+
+      {/* Native Ad - Bottom High Impression Spot */}
+      <NativeBanner />
 
       {/* Aesthetic credit line complying with Architectural Honesty and Anti-AI-Slop */}
       <div className="flex items-center justify-center gap-1.5 text-[10px] text-[#525166] font-medium pt-2 select-none">
