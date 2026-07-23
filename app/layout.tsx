@@ -30,7 +30,6 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
       <body className={`${inter.variable} font-sans antialiased bg-[#04030a] text-gray-100 min-h-screen flex flex-col`} suppressHydrationWarning>
         <Script id="monetag-push" src="https://5gvci.com/act/files/tag.min.js?z=11366986" strategy="beforeInteractive" />
         <Script id="monetag-vignette" strategy="afterInteractive">{`(function(s){s.dataset.zone='11367117',s.src='https://n6wxm.com/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))`}</Script>
-        <Script id="monetag-popunder" strategy="afterInteractive">{`(function(s){s.dataset.zone='11367153',s.src='https://al5sm.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))`}</Script>
         <AuthProvider>
           <div className="flex min-h-screen">
             <AppSidebar />
