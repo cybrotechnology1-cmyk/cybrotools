@@ -6,6 +6,7 @@ import { Suspense } from "react";
 import { AuthProvider } from '@/components/AuthProvider';
 import { AppSidebar } from '@/components/AppSidebar';
 import { Header } from '@/components/Header';
+import PrivacyBanner from '@/components/PrivacyBanner';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
 
@@ -48,6 +49,7 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
             navigator.serviceWorker.register('/sw.js', { scope: '/' });
           }
         `}</Script>
+        <PrivacyBanner />
       </body>
     </html>
   );
